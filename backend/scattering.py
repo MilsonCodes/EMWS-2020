@@ -3,6 +3,9 @@ import time
 import numpy as np
 
 
+# Set precision for printing arrays
+np.set_printoptions(precision=5)
+
 # Classes for storing structure data
 class Structure:
 
