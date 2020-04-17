@@ -4,7 +4,7 @@ import numpy as np
 
 
 # Set precision for printing arrays
-np.set_printoptions(precision=5)
+np.set_printoptions(precision=6, suppress=True)
 
 # Classes for storing structure data
 class Structure:
@@ -134,7 +134,7 @@ class Structure:
             print(m)
 
     def __str__(self):
-        return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1) + ',' + str(self.k2) + ')\n'
+        return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
 
 # Test code
 def test():
