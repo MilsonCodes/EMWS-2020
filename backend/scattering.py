@@ -1,7 +1,7 @@
 import math
 import time
 import numpy as np
-
+from scipy.linalg import null_space
 
 # Set precision for printing arrays
 np.set_printoptions(precision=6, suppress=True)
@@ -135,6 +135,19 @@ class Structure:
 
     def __str__(self):
         return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
+    def calcConstants(self, c1, c2, c3, c4):
+        # Currently attempting iterative method
+        # May look into setting up matrix A and finding null space
+        c = np.zeros(self.num*4)
+        c[0] = c1
+        c[1] = c2
+        c[self.num*4-2] = c3
+        c[self.num*4-1] = c4
+        for n in range(len(c)-4):
+            n += 2
+            print('pass ' + str(n-2) + ': ' + str(c))
+            c[n] = 1
+        return c
 
 # Test code
 def test():
@@ -173,6 +186,7 @@ def test():
     s.printMaxwell()
     s.calcEig()
     s.calcModes()
+    print('Final Constants: ' + str(s.calcConstants(1,0,0,1)))
     print('\nEnd of test\n\n')
     
     
