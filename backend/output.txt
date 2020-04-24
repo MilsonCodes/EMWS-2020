@@ -48,7 +48,7 @@ Maxwells:
 
 Calculating Eigen Problem
 For layer 1
-Time to calculate Eigensystem: 0.00102 seconds
+Time to calculate Eigensystem: 0.00091 seconds
 Values:
 [ 0.      -1.904253j  0.360895-0.j       -0.360895+0.j
   0.      +1.904253j]
@@ -62,7 +62,7 @@ Vectors:
  [-0.056872+0.j        0.773373+0.j        0.773373+0.j
   -0.056872+0.j      ]]
 For layer 2
-Time to calculate Eigensystem: 0.00051 seconds
+Time to calculate Eigensystem: 0.00045 seconds
 Values:
 [ 0.      -1.673912j  0.      +1.673912j  0.107923+0.j
  -0.107923+0.j      ]
@@ -76,7 +76,7 @@ Vectors:
  [ 0.862234+0.j        0.862234+0.j       -0.      -0.123954j
    0.      +0.123954j]]
 For layer 3
-Time to calculate Eigensystem: 0.00046 seconds
+Time to calculate Eigensystem: 0.00048 seconds
 Values:
 [ 0.      -1.904253j  0.360895-0.j       -0.360895+0.j
   0.      +1.904253j]
@@ -97,8 +97,26 @@ Layer 1 Modes:
 c*[[-0.123874  0.584368  0.789639  0.789639]]
 Ambient Right Modes:
 c*[[ 22.017091   0.769142   0.769142 -22.088138]]
+Final Constants: 
+[[ 1.      ]
+ [-0.      ]
+ [-0.666327]
+ [ 3.544958]
+ [ 0.      ]
+ [ 0.      ]
+ [-0.      ]
+ [ 0.      ]
+ [ 0.      ]
+ [-0.      ]
+ [-0.      ]
+ [-0.      ]]
+With incoming coefficients (-1, 0) on the left and (0, 0) on the right
+Solutions:
+[-22.017091   0.        -0.212577 -10.500523]
+[-0.  0.  0.  0.]
+[ 0.  0.  0. -0.]
 
 End of test
 
 
-Ran test in: 0.0327 seconds
+Ran test in: 0.0341 seconds

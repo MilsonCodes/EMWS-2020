@@ -1,7 +1,7 @@
 import math
 import time
 import numpy as np
-from scipy.linalg import null_space
+from scipy.linalg import null_space, solve
 
 # Set precision for printing arrays
 np.set_printoptions(precision=6, suppress=True)
@@ -18,6 +18,7 @@ class Structure:
             self.length = length
             self.epsilon = epsilon
             self.mu = mu
+            self.solution = np.zeros(4)
 
         def __str__(self):
             try:
@@ -122,8 +123,8 @@ class Structure:
     def calcModes(self):
         print('\nCalculating Modes')
         for layer in self.layers:
-            mode = 0
-            for n in range(len(layer.eigVal)):
+            mode = np.zeros((1,4))
+            for n in range(4):
                 mode += np.real(layer.eigVec[n]) * math.exp(np.real(layer.eigVal[n]) * layer.length)
             layer.modes = mode
             print(str(layer.name) + ' Modes:\nc*' + str(layer.modes))
@@ -136,18 +137,43 @@ class Structure:
     def __str__(self):
         return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
     def calcConstants(self, c1, c2, c3, c4):
-        # Currently attempting iterative method
-        # May look into setting up matrix A and finding null space
-        c = np.zeros(self.num*4)
-        c[0] = c1
-        c[1] = c2
-        c[self.num*4-2] = c3
-        c[self.num*4-1] = c4
-        for n in range(len(c)-4):
-            n += 2
-            print('pass ' + str(n-2) + ': ' + str(c))
-            c[n] = 1
-        return c
+        c = np.zeros((self.num*4,1))
+        c[0][0] = c1
+        c[1][0] = c2
+        c[self.num*4-2][0] = c3
+        c[self.num*4-1][0] = c4
+        a = np.zeros((self.num*4,self.num*4))
+        f = c
+        # Set A equal to the Maxwell matrix
+        for n in range(self.num):
+            aug = 4 * n
+            for i in range(4):
+                for j in range(4):
+                    a[i+aug][j+aug] = self.maxwell[n].A[i][j].imag
+        self.maxwell = a
+        for n in range(4):
+            f[n][0] = f[n][0] - ((a[n][0]*c1) - (a[n][1]*c2))
+            m = 4 * (self.num-1) + n
+            i = 4 * (self.num-1) - 2
+            j = 4 * (self.num-1) - 1
+            f[m][0] = f[m][0] - ((a[m][i]*c3) - (a[m][j]*c4))
+        x = solve(a,f)
+        for i in range(self.num):
+            for j in range(4):
+                sol = self.layers[i].modes[0][j] * f[i*4+j][0]
+                self.layers[i].solution[j] = sol 
+        return x
+   
+    def solution(self):
+        solutions = []
+        for n in range(self.num):
+            solutions.append(self.layers[n].solution)
+        return solutions
+
+    def printSol(self):
+        print('Solutions:')
+        for s in self.solution():
+            print(s)
 
 # Test code
 def test():
@@ -186,7 +212,13 @@ def test():
     s.printMaxwell()
     s.calcEig()
     s.calcModes()
-    print('Final Constants: ' + str(s.calcConstants(1,0,0,1)))
+    c1 = -1
+    c2 = 0
+    c3 = 0
+    c4 = 0
+    print('Final Constants: \n' + str(s.calcConstants(c1,c2,c3,c4)))
+    print('With incoming coefficients (' + str(c1)+ ', ' + str(c2)+ ') on the left and (' + str(c3)+ ', ' + str(c4)+ ') on the right')
+    s.printSol()
     print('\nEnd of test\n\n')
     
     
