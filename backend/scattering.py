@@ -170,6 +170,16 @@ class Structure:
             solutions.append(self.layers[n].solution)
         return solutions
 
+    def checkSol(self):
+        total = 0
+        sol = self.solution()
+        for n in range(self.num):
+            for i in range(4):
+                total =+ sol[n][i]
+                
+        return total
+
+
     def printSol(self):
         print('Solutions:')
         for s in self.solution():
@@ -219,6 +229,7 @@ def test():
     print('Final Constants: \n' + str(s.calcConstants(c1,c2,c3,c4)))
     print('With incoming coefficients (' + str(c1)+ ', ' + str(c2)+ ') on the left and (' + str(c3)+ ', ' + str(c4)+ ') on the right')
     s.printSol()
+    print('Sum of solutions in all layers: ' + str(s.checkSol()))
     print('\nEnd of test\n\n')
     
     
