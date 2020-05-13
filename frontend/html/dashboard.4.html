@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>EMWS - Powered by Flatkit</title>
+  <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+  <link rel="apple-touch-icon" href="../assets/images/logo.png">
+  <meta name="apple-mobile-web-app-title" content="Flatkit">
+  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="shortcut icon" sizes="196x196" href="../assets/images/logo.png">
+  
+  <!-- style -->
+  <link rel="stylesheet" href="../assets/animate.css/animate.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/glyphicons/glyphicons.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/font-awesome/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/material-design-icons/material-design-icons.css" type="text/css" />
+
+  <link rel="stylesheet" href="../assets/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+  <!-- build:css ../assets/styles/app.min.css -->
+  <link rel="stylesheet" href="../assets/styles/app.css" type="text/css" />
+  <!-- endbuild -->
+  <link rel="stylesheet" href="../assets/styles/font.css" type="text/css" />
+</head>
+
+
+<body>
+
+  <div class="app" id="app">
+
+<!-- ############ LAYOUT START-->
+
+  <!-- content -->
+  <div id="content" class="app-content box-shadow-z0" role="main">
+    <div class="app-header navbar-md white box-shadow">
+      <div ui-include="'../views/blocks/header.4.html'"></div>
+    </div>
+    <div ui-view class="app-body" id="view">
+<div ng-app="myApp" ng-controller="EMWSCtrl">
+<!-- ############ PAGE START-->
+
+
+<div class="padding p0" >
+  <div class="row">
+    <div class="col-sm-8 col-md-9">
+      <h4 class="m-a-0 m-b-sm text-md">Introduction</h4>
+      <div class="m-b" id="accordion">
+        <div class="panel box no-border m-b-xs">
+            <div id="c_1" class="collapse in">
+                <div class="box-body">
+                    <p class="text-black-dk" style="font-size:0.95rem"> The development of this graphical user interface was supported by grant DMS-1411393 (2014-2018) from the National Science Foundation at Louisiana State University under the guidance of PI Stephen P. Shipman.  As one of the projects covered by the grant, undergraduate students created the mathematical code and web interface to compute and simulate harmonic electromagnetic fields in layered media.  The goal is to make available to the community a versatile online application for the computation of EM fields in media with any number of layers having arbitrary electric and magnetic tensors.  The objectives are (1) to allow scientists to explore phenomena of scattering, guided modes, and resonance in the most general EM layered media and (2) to provide a pedagogical tool for students and professionals to learn EM in layered media.</p>
+                    <p class= "text-black-dk" style="font-size:0.95rem">The project is in its initial stages and is being further developed by undergraduate students through various funding sources, including President’s Aid from Louisiana State University.  Further developments include a tutorial on the theory of electrodynamics in layered media, a user manual, computation of transmission and reflection coefficients as functions of frequency and angle of incidence, and computation of dispersion relations for pure and leaky guided modes.</p>
+                </div>
+            </div>
+        </div>
+        <!--<div class="panel box no-border m-b-xs">
+          <div class="box-header p-y-sm">
+            <span class="pull-right label text-sm">3214</span>
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#c_1">
+              Q: How to create an icon like the demo app
+            </a>
+          </div>
+          <div id="c_1" class="collapse in">
+            <div class="box-body">
+              <p class="text-sm text-muted"><span class="text-md pull-left w-32 m-r rounded success">A</span> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, <br><br>raw denim aesthetic synth nesciunt you probably haven' heard of them accusamus labore sustainable VHS sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel box no-border m-b-xs">
+          <div class="box-header p-y-sm">
+            <span class="pull-right label text-sm">420</span>
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#c_2">
+              Q: How to build my custom color
+            </a>
+          </div>
+          <div id="c_2" class="collapse">
+            <div class="box-body">
+              <p class="text-sm text-muted"><span class="text-md pull-left w-32 m-r rounded info">A</span> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel box no-border m-b-xs">
+          <div class="box-header p-y-sm">
+            <span class="pull-right label text-sm">230</span>
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#c_3">
+              Q: What is the app requriements
+            </a>
+          </div>
+          <div id="c_3" class="collapse">
+            <div class="box-body">
+              <span class="text-md pull-left w-32 m-r rounded warning">A</span> 
+              <p class="text-sm text-muted clear">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel box no-border m-b-xs">
+          <div class="box-header p-y-sm">
+            <span class="pull-right label text-sm">49</span>
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#c_4">
+              Q: Where to find the API
+            </a>
+          </div>
+          <div id="c_4" class="collapse">
+            <div class="box-body">
+              <span class="text-md pull-left w-32 m-r rounded primary">A</span> 
+              <p class="text-sm text-muted clear">Vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. nesciunt you probably haven't heard of them accusamus labore sustainable
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel box no-border m-b-xs">
+          <div class="box-header p-y-sm">
+            <span class="pull-right label text-sm">6</span>
+            <a data-toggle="collapse" data-parent="#accordion" data-target="#c_5">
+              Q: How to add my router
+            </a>
+          </div>
+          <div id="c_5" class="collapse">
+            <div class="box-body">
+              <span class="text-md pull-left w-32 m-r rounded dark">A</span> 
+              <p class="text-sm text-muted clear">Vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. nesciunt you probably haven't heard of them accusamus labore sustainable
+              </p>
+            </div>
+          </div>
+        </div>-->
+      </div>
+    </div>
+    <div class="col-sm-4 col-md-3">
+      <h4 class="m-a-0 m-b-sm text-md">Credits</h4>
+      <div class="box">
+        <ul class="list inset">
+          <li class="list-item">
+            <a href="https://www.math.lsu.edu/~shipman/" class="list-left">
+              <span class="w-40 circle avatar accent">
+                <span>S</span>
+                <i class="away b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href="https://www.math.lsu.edu/~shipman/">Stephen Shipman</a></div>
+              <small class="text-muted text-ellipsis">Professor, Mathematics</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar green">
+                <span>D</span>
+                <i class="away b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href>Dylan Blanchard</a></div>
+              <small class="text-muted text-ellipsis">Web Designer</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar purple">
+                <span>J</span>
+                <i class="busy b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href>Joshua Brock</a></div>
+              <small class="text-muted text-ellipsis">Math Backend</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar purple">
+                <span>A</span>
+                <i class="busy b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href>Andrew Rogers</a></div>
+              <small class="text-muted text-ellipsis">Math Backend</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar warn">
+                <span>T</span>
+                <i class="away b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href>Trevor Gilmore</a></div>
+              <small class="text-muted text-ellipsis">Mathbox 3D Field Visualiztion</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar brown">
+                <span>N</span>
+                <i class="away b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href="https://noahtemplet.dev/">Noah Templet</a></div>
+              <small class="text-muted text-ellipsis">Web Developer</small>
+            </div>
+          </li>
+          <li class="list-item">
+            <a href class="list-left">
+              <span class="w-40 circle avatar warn">
+                <span>M</span>
+                <i class="away b-white"></i>
+              </span>
+            </a>
+            <div class="list-body">
+              <div><a href>Michael Sheppard III</a></div>
+              <small class="text-muted text-ellipsis">Web Developer</small>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+      <div class="m-b">
+        <p><i class="fa fa-fw text-muted m-r-xs fa-plus-circle"></i> <a href="http://emlab.utep.edu/ee5390cem.htm">Computational Electromagnetics (Additional Info)</a></p>
+        <p><i class="fa fa-fw text-muted m-r-xs fa-plus-circle"></i> <a href="https://www.math.lsu.edu/~shipman/articles/ShipmanWelters2013a.pdf">EM Scattering Publication</a></p>
+        <!-- <p><i class="fa fa-fw text-muted m-r-xs fa-plus-circle"></i> <a href="http://emlab.utep.edu/ee5390cem.htm"> (additional info)</a></p>
+        <p><i class="fa fa-fw text-muted m-r-xs fa-phone"></i> (432) 999 000</p>
+        <p><i class="fa fa-fw text-muted m-r-xs fa-clock-o"></i> Mon-Fri 9:00 - 16:00</p> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Application -->
+<div class="padding p1" style="visibility: hidden; position: absolute; left: 0px; top: px;">
+    <div ng-init="init()" style="display: none"></div>
+    <input id="shownVal" value="Eₓ" style="display: none">
+    <div class="margin">
+        <h5 class="mb-0 _300">Visualizations of Electromagnetic Wave Scattering</h5>
+    </div>
+    <div class="row">
+        <div class="col-12 ">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Define Layered Structure</h3>
+                    <small>Enter number of layers and length, electric tensors, and magnetic tensors for each layer.</small>
+                </div>
+                <div class="box-divider m-a-0"></div>
+                <div class="box-body">
+                    <div class="form-group row">
+                        <div class="col-lg-2">
+                            <label>Number of Layers </label>
+                        </div>
+                        <div class="col-lg-2">
+                            <!-- <input type="text" class="form-control  form-control-sm" id="numLayers" value="3">  -->
+                            <div class="input-group">
+                                <input type="text" id="numLayers" ng-change="updateLayers()" ng-model="NumLayers" value="3" class="form-control">
+                                <span class="input-group-btn">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <input ng-model="NumLayers"> -->
+                    <form id="newStructForm" role="form">
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-lg-1  col-sm-1 col-md-1 col-xs-1  form-control-label"></label>
+                            <div class="col-lg-11  col-md-11 col-sm-11 col-xs-11">
+                                <div class="row row-sm">
+                                    <div class="col-lg-1 col-sm-1 col-md-1 col-xs-1 center-block">
+                                        <span class="center-block label dark pos-rlt m-r-xs"><b class="center-block arrow bottom b-dark pull-in"></b>LENGTH</span>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 center-block">
+                                        <span class="center-block label dark pos-rlt m-r-xs"><b class="center-block arrow bottom b-dark pull-in"></b>EPSILON</span>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 center-block">
+                                        <span class="center-block label dark pos-rlt m-r-xs"><b class="center-block arrow bottom b-dark pull-in"></b>MU</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ul ng-repeat="layer in Layers" style="padding-left: 0;">
+                            <div class='form-group row'>
+                                <label for='inputPassword3' class='col-lg-1 col-sm-1 col-md-1 col-xs-1 form-control-label'>{{layer.layerName}}</label>
+                                <div class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>
+                                	<div class='row row-sm'>
+                                		<div class='col-lg-1 col-sm-1 col-md-1 col-xs-1'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='length' ng-model="layer.length" ng-attr-id="{{ 'l' + $index }}">
+                                        </div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                		
+	                                		<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.epsilonA[0][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[0][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[0][2]">
+	                                        </div>
+                                        
+
+                                		</div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                			<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.muA[0][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[0][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[0][2]">
+	                                        </div>
+                                			
+                                		</div>
+
+                                	</div>
+                                	<div class='row row-sm'>
+                                		<div class='col-lg-1 col-sm-1 col-md-1 col-xs-1'>
+                                           
+                                        </div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                		
+	                                		<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.epsilonA[1][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[1][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[1][2]">
+	                                        </div>
+                                        
+
+                                		</div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                			<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilons' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.muA[1][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilons' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[1][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilons' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[1][2]">
+	                                        </div>
+                                			
+                                		</div>
+                                	</div>
+                                	<div class='row row-sm'>
+                                		<div class='col-lg-1 col-sm-1 col-md-1 col-xs-1'>
+                                           
+                                        </div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                		
+	                                		<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.epsilonA[2][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[2][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilonA[2][2]">
+	                                        </div>
+                                        
+
+                                		</div>
+                                		<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+                                			<div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.muA[2][0]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-right: 0; padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[2][1]">
+	                                        </div>
+	                                        <div class='col-lg-4 col-md-4 col-sm-4 col-xs-4' style="padding-left: 0;">
+	                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.muA[2][2]">
+	                                        </div>
+                                			
+                                		</div>
+
+                                	</div>
+                                    <!-- <div class='row row-sm'>
+                                        <div class='col-lg-1'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='length' ng-model="layer.length" ng-attr-id="{{ 'l' + $index }}">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index }}" ng-model="layer.epsilon[0]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'l' + $index+''+$index }}" ng-model="layer.epsilon[1]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index }}" ng-model="layer.mu[0]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index+''+$index }}" <input ng-model="layer.mu[1]">
+                                        </div>
+                                    </div>
+                                    <div class='row row-sm'>
+                                        <div class='col-lg-1'></div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index+''+$index+''+$index }}" <input ng-model="layer.epsilon[2]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index+''+$index+''+$index+''+$index }}" <input ng-model="layer.epsilon[3]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index+''+$index+''+$index }}" <input ng-model="layer.mu[2]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index+''+$index+''+$index+''+$index }}" <input ng-model="layer.mu[3]">
+                                        </div>
+                                    </div>
+                                    <div class='row row-sm'>
+                                        <div class='col-lg-1'></div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index+''+$index+''+$index }}" <input ng-model="layer.epsilon[2]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='epsilon' ng-attr-id="{{ 'e' + $index+''+$index+''+$index+''+$index }}" <input ng-model="layer.epsilon[3]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index+''+$index+''+$index }}" <input ng-model="layer.mu[2]">
+                                        </div>
+                                        <div class='col-lg-2'>
+                                            <input type='text' class='form-control form-control-sm' placeholder='mu' ng-attr-id="{{ 'm' + $index+''+$index+''+$index+''+$index }}" <input ng-model="layer.mu[3]">
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </ul>
+                    </form>
+                    <button type="button" class='btn white' ng-click="buildStruct()">Build Structures</button>
+                    <button type="button" class='btn btn-sm white' ng-click="addLayer()">+</button>
+                    <button type="button" class='btn btn-sm white' ng-click="removeLayer()">-</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 ">
+            <div class="row no-gutter box bg">
+                <div class="col-12">
+                    <div class="box-header">
+                        <h3>Layered Structure</h3>
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div style="height:400px" class="box-body addHere3" id="structureView">
+                        <div style="height:400px">
+                            <!-- place structure view here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="padding p2" style="visibility: hidden; position: absolute; left: 0px; top: 0px;">
+    <div class="margin">
+        <h5 class="mb-0 _300">Electromagnetic Field</h5>
+        <small class="text-muted">Computation of electromagnetic field in space and time.</small>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Frequency and Wave Vector</h3>
+                    <small>Enter frequency &omega; and wave vector (k<sub>1</sub>, k<sub>2</sub>) parallel to layers.</small>
+                    <!-- <small>box to add</small> -->
+                </div>
+                <div class="text-center b-t">
+                    <div class="row-col">
+                        <div class="row-cell p-a">
+                            <form role="form">
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>&omega;</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="omega" ng-model="o">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>k<sub>1</sub></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="k1" ng-model="k1">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>k<sub>2</sub></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="k2" ng-model="k2">
+                                    </div>
+                                </div>
+                                <div class="form-group row" style="margin-bottom:0rem">
+                                    <button ng-click="buildModes()" type="button" class="btn gray">Calculate Modes</button>
+                                </div>
+                                <!--<div class="form-group row m-t-md">
+                                    <div class="col-lg-offset-2 col-lg-5">
+                                         <button ng-click="buildModes()" type="submit" class="btn white">Recalculates Modes</button> 
+                                    </div>
+                                </div>-->
+                            </form>
+                        </div>
+                        <!-- <div class="row-cell p-a dker">
+                            Right and left hand incoming modes
+                            <div id="forwardModes"> </div>
+                            <div id="backwardModes"> </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="row no-gutter box bg">
+                <div class="col-6">
+                    <div class="box-header">
+                        <h3>Incoming Modes in Ambient Medium</h3>
+                        <!--<small>Calculate perpendicular wave vectors in the left and right ambient media.</small>-->
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body " id="">
+                        <div style="padding-left:25px;float:left;margin-bottom: 10px">
+                            <h6 style="margin-bottom: 0rem">Incoming Modes on the Left</h6>
+                            <small style="display:block;opacity:0.6;margin-top:2px;margin-bottom:4px;">Check two rightward (incoming) modes in the left ambient medium.</small> 
+                            <!--<p> {{mBack1}} </p>
+                            <p> {{mBack2}} </p>-->
+                            <div class="form-group row" style="margin-left:0rem">
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" id="backModeChk1">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" id="backModeChk2">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" id="backModeChk3">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" id="backModeChk4">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                             <!-- place procedural layer forms here --> 
+                        </div>
+                        <div style="clear:both;padding-left:25px;float:left;">
+                            <h6 style="margin-bottom: 0rem">Incoming Modes on the Right</h6>
+                            <small style="display:block;opacity:0.6;margin-top:2px;margin-bottom:4px;">Check two leftward (incoming) modes in the right ambient medium.</small> 
+                            <!--<p> {{mFor1}} </p>
+                            <p> {{mFor2}} </p>-->
+                            <div class="form-group row" style="margin-left:0rem">
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" id="forModeChk1">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" id="forModeChk2">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" id="forModeChk3">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" id="forModeChk4">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                             <!-- place procedural layer forms here -->
+                        </div>
+                    </div>             
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Coefficients of Incoming Modes</h3>
+                    <small>Enter complex amplitudes of the incoming modes.</small>
+                </div>
+                <div class="text-center b-t">
+                    <div class="row-col">
+                        <div class="row-cell p-a">
+                            <!-- omega k1 k2 -->
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-lg-3 form-control-label">Incoming Left</label>
+                                <div class="col-lg-9">
+                                    <div class="row row-sm">
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[0]" id="j1" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incoming0">Test</label>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[1]" id="j2" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incoming1">Test</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-lg-3 form-control-label">Incoming Right</label>
+                                <div class="col-lg-9">
+                                    <div class="row row-sm">
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[2]" id="j3" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incoming2">Test</label>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[3]" id="j4" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incoming3">Test</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class='btn red' ng-click="runExp()">Run Experiment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <div class="row no-gutter box bg">
+                <div class="col-10">
+                    <div class="box-header">
+                        <h3>E and H Field Components at Initial Time</h3>
+                        <!--<small>Input for # of Layers, Lengths, Epsilon, Mu</small>-->
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body addHere" id="structView">
+                        <div style="height:400px;">
+                            <!-- place procedural layer forms here -->
+                        </div>
+                    </div>
+                    <div class="box-body" id="">
+                        <div style="height:30px">
+                            <button type="button" class='btn btn-sm white' ng-click="toggleLine(1)">E<sub>x</sub></button>
+                            <button type="button" class='btn btn-sm white' ng-click="toggleLine(2)">E<sub>Y</sub></button>
+                            <button type="button" class='btn btn-sm white' ng-click="toggleLine(3)">H<sub>x</sub></button>
+                            <button type="button" class='btn btn-sm white' ng-click="toggleLine(4)">H<sub>Y</sub></button>
+                            <button type="button" class='btn btn-sm white' ng-click="resetFieldChart()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="mathbox-field-box">
+        <div class="col-10">
+            <div class="row no-gutter box bg">
+                <div class="col-10">
+                    <div class="box-header">
+                        <h3>Time-Dynamic E and H Field Components Parallel to the Layers</h3>
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body" id="testcanvas" style="min-height: 400px; width: 85%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+<div class="padding p3 col-lg-12 col-md-12 col-sm-12 col-xs-12" style="visibility: hidden;  position: absolute; left: 0px; top: 0px;">
+    <div class="margin">
+        <h5 class="mb-0 _300">Dispersion Experiment</h5>
+        <small class="text-muted">WIP</small>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 ">
+            <div class="row no-gutter box bg">
+                <div class="col-12">
+                    <div class="box-header">
+                        <h3>Dispersion</h3>
+                        <small>Input for # of Layers, Lengths, Epsilon, Mu</small>
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body " id="dispView">
+                        <div style="height:262px">
+                            <!-- place procedural layer forms here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="padding p4" style="visibility: hidden; position: absolute; left: 0px; top: 0px;">
+    <div class="margin">
+        <h5 class="mb-0 _300">Transmission Experiment</h5>
+        <small class="text-muted">WIP</small>
+    </div>
+
+    <div class="row">
+    	<div class="col-lg-4">
+    		<div class="box">
+                <div class="box-header">
+                    <h3>Input Frequencys and Parallel Wave Vector</h3>
+                    <small>&omega;, k<sub>1</sub>, k<sub>2</sub>. Computes incoming modes</small>
+                    <!-- <small>box to add</small> -->
+                </div>
+                <div class="text-center b-t">
+                    <div class="row-col">
+                        <div class="row-cell p-a">
+                            <form role="form">
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>&omega;-interval</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="intervalLeft" ng-model="wLeft"> 
+                                        <input type="text" class="form-control form-control-sm" id="intervalRight" ng-model="wRight"> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>Points</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="intervalLeft" ng-model="wPoints"> 
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>z</label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="intervalLeft" ng-model="zPoint"> 
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>k<sub>1</sub></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="k1" ng-model="k1">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4">
+                                        <label>k<sub>2</sub></label>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control form-control-sm" id="k2" ng-model="k2">
+                                    </div>
+                                </div>
+                                <div class="form-group row m-t-md">
+                                    <button ng-click="buildTransmission()" type="submit" class="btn white">Calculate Modes</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- <div class="row-cell p-a dker">
+                            Right and left hand incoming modes
+                            <div id="forwardModes"> </div>
+                            <div id="backwardModes"> </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+    	</div>
+      <div >
+    	<div class= "col-lg-4">
+    		<div class="row no-gutter box bg">
+                <div class="col-12">
+                    <div class="box-header">
+                        <h3>Incoming Modes in Ambient Medium</h3>
+                        <!--<small>Calculate perpendicular wave vectors in the left and right ambient media.</small>-->
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body " id="">
+                        <div style="padding-left:25px;float:left;margin-bottom: 10px">
+                            <h6 style="margin-bottom: 0rem">Incoming Modes on the Left</h6>
+                            <small style="display:block;opacity:0.6;margin-top:2px;margin-bottom:4px;">Check two rightward (incoming) modes in the left ambient medium.</small> 
+                            <!--<p> {{mBack1}} </p>
+                            <p> {{mBack2}} </p>-->
+                            <div class="form-group row" style="margin-left:0rem">
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" id="backModeChkT1">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" id="backModeChkT2">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" id="backModeChkT3">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" id="backModeChkT4">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                             <!-- place procedural layer forms here --> 
+                        </div>
+                        <div style="clear:both;padding-left:25px;float:left;">
+                            <h6 style="margin-bottom: 0rem">Incoming Modes on the Right</h6>
+                            <small style="display:block;opacity:0.6;margin-top:2px;margin-bottom:4px;">Check two leftward (incoming) modes in the right ambient medium.</small> 
+                            <!--<p> {{mFor1}} </p>
+                            <p> {{mFor2}} </p>-->
+                            <div class="form-group row" style="margin-left:0rem">
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" id="forModeChkT1">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" id="forModeChkT2">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" id="forModeChkT3">
+                                    <span class="checkmark"></span>
+                                </label>
+
+                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" id="forModeChkT4">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                             <!-- place procedural layer forms here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Coefficients of Incoming Modes</h3>
+                    <small>Enter complex amplitudes of the incoming modes.</small>
+                </div>
+                <div class="text-center b-t">
+                    <div class="row-col">
+                        <div class="row-cell p-a">
+                            <!-- omega k1 k2 -->
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-lg-3 form-control-label">Incoming Left</label>
+                                <div class="col-lg-9">
+                                    <div class="row row-sm">
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[0]" id="j1" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incomingT0">Test</label>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[1]" id="j2" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incomingT1">Test</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-lg-3 form-control-label">Incoming Right</label>
+                                <div class="col-lg-9">
+                                    <div class="row row-sm">
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[2]" id="j3" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incomingT2">Test</label>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[3]" id="j4" style="width: 50%; float: left;">
+                                            <label style="margin-top: 5px;" id="incomingT3">Test</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class='btn red' ng-click="runTransmissionExp()">Run Experiment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-12 ">
+            <div class="row no-gutter box bg">
+                <div class="col-12">
+                    <div class="box-header">
+                        <h3>Transmission</h3>
+                        <small>Input for # of Layers, Lengths, Epsilon, Mu</small>
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body " id="transmissionView">
+                        <div style="height:262px">
+                            <!-- place procedural layer forms here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ############ PAGE END-->
+</div></div>
+    </div>
+    <div class="dark dk pos-rlt">
+      <div class="p-md">
+        <!-- <div ui-include="'../views/blocks/footer.1.html'"></div> -->
+      </div>
+    </div>
+  </div>
+  <!-- / -->
+
+  <!-- theme switcher -->
+  <!-- <div id="switcher">
+    <div ui-include="'../views/blocks/switcher.html'"></div>
+  </div> -->
+  <!-- / -->
+
+<!-- ############ LAYOUT END-->
+
+  </div>
+<!-- build:js scripts/app.html.js -->
+<!-- jQuery -->
+  <script src="../libs/jquery/jquery/dist/jquery.js"></script>
+<!-- Bootstrap -->
+  <script src="../libs/jquery/tether/dist/js/tether.min.js"></script>
+  <script src="../libs/jquery/bootstrap/dist/js/bootstrap.js"></script>
+<!-- core -->
+  <script src="../libs/jquery/underscore/underscore-min.js"></script>
+  <script src="../libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+  <script src="../libs/jquery/PACE/pace.min.js"></script>
+
+  <script src="scripts/config.lazyload.js"></script>
+
+  <script src="scripts/palette.js"></script>
+  <script src="scripts/ui-load.js"></script>
+  <script src="scripts/ui-jp.js"></script>
+  <script src="scripts/ui-include.js"></script>
+  <script src="scripts/ui-device.js"></script>
+  <script src="scripts/ui-form.js"></script>
+  <script src="scripts/ui-nav.js"></script>
+  <script src="scripts/ui-screenfull.js"></script>
+  <script src="scripts/ui-scroll-to.js"></script>
+  <script src="scripts/ui-toggle-class.js"></script>
+
+  <script src="scripts/app.js"></script>
+  <script src="scripts/math.min.js"></script>
+  <script src="scripts/dynamic.js"></script>
+  <script src="scripts/emScattering.js"></script>
+  <script src="scripts/emScattering2.js"></script>
+  <script src="scripts/emScattering3.js"></script>
+  <script src="scripts/eigencalc.js"></script>
+  <script src="scripts/loader.js"></script>
+  <script src="scripts/Eigen.js"></script>
+  <script src="scripts/numeric-1.2.6.js"></script>
+  <script src="scripts/mathbox-bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="scripts/EMWSCtrl.js"></script>
+  
+  <script>console.log("this ran5");</script>
+  <!-- ajax -->
+  <script src="../libs/jquery/jquery-pjax/jquery.pjax.js"></script>
+  <script src="scripts/ajax.js"></script>
+<!-- endbuild -->
+</body>
+</html>
