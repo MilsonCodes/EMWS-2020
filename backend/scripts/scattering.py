@@ -144,13 +144,15 @@ class Structure:
         c[self.num*4-1][0] = c4
         a = np.zeros((self.num*4,self.num*4))
         f = c
-        # Set A equal to the Maxwell matrix
         for n in range(self.num):
             aug = 4 * n
             for i in range(4):
                 for j in range(4):
+                    # Set the diagonals of A equal to the maxwell for each layer
                     a[i+aug][j+aug] = self.maxwell[n].A[i][j].imag
-        self.maxwell = a
+                    #if n != self.num-1:
+                        # Set the off diagonal entries equal to the complex conjugate
+                    #    a[i+aug][j+4+aug] = -self.maxwell[n+1].real.getH().item((i,j))
         for n in range(4):
             f[n][0] = f[n][0] - ((a[n][0]*c1) - (a[n][1]*c2))
             m = 4 * (self.num-1) + n
