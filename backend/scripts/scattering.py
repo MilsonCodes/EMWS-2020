@@ -136,6 +136,11 @@ class Structure:
 
     def __str__(self):
         return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
+    
+    def calcTransfer(self):
+        transfers = [np.matrix((4,4))] * (self.num-1)
+        self.transferMatrices = transfers
+    
     def calcConstants(self, c1, c2, c3, c4):
         c = np.zeros((self.num*4,1))
         c[0][0] = c1
@@ -144,6 +149,9 @@ class Structure:
         c[self.num*4-1][0] = c4
         a = np.zeros((self.num*4,self.num*4))
         f = c
+
+        # Set scattering matrix
+        # TODO: Create scattering matrix in seperate function
         for n in range(self.num):
             aug = 4 * n
             for i in range(4):
@@ -153,6 +161,8 @@ class Structure:
                     #if n != self.num-1:
                         # Set the off diagonal entries equal to the complex conjugate
                     #    a[i+aug][j+4+aug] = -self.maxwell[n+1].real.getH().item((i,j))
+        
+        # Calculate constants
         for n in range(4):
             f[n][0] = f[n][0] - ((a[n][0]*c1) - (a[n][1]*c2))
             m = 4 * (self.num-1) + n
@@ -224,6 +234,8 @@ def test():
     s.printMaxwell()
     s.calcEig()
     s.calcModes()
+    s.calcTransfer()
+    print(s.transferMatrices)
     c1 = -1
     c2 = 0
     c3 = 0
