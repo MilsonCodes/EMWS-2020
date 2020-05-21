@@ -94,9 +94,9 @@ class Structure:
             m43 = omega * ((e[0][2]*k2/e[2][2]) - (k2*u[2][0]/u[2][2]))
             m44 = omega * (-(e[0][2]*k1/e[2][2]) - (k2*u[2][1]/u[2][2]))
             maxwell_matrix = np.matrix([[m11,  m12, m13, m14],
-                                    [m21,  m22, m23, m24],
-                                    [m31,  m32, m33, m34],
-                                    [m41,  m42, m43, m44]])
+                                        [m21,  m22, m23, m24],
+                                        [m31,  m32, m33, m34],
+                                        [m41,  m42, m43, m44]])
             # maxwell_matrix = map(lambda x: x * omega, maxwell_matrix)
             # maxwell_matrix = map(lambda x: map(
             #     lambda y: complex(y, 1), x), maxwell_matrix)
@@ -248,6 +248,6 @@ def test():
     
     
 start = time.perf_counter()
-test()
+#test()
 end = time.perf_counter()
-print(f'Ran test in: {end-start:0.4f} seconds')
+#print(f'Ran test in: {end-start:0.4f} seconds')
