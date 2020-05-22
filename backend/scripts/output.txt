@@ -1,0 +1,124 @@
+Starting Test:
+Instanciating Structure
+Adding Layer
+     Instanciating Layer
+Adding Layer
+     Instanciating Layer
+Adding Layer
+     Instanciating Layer
+
+LAYERS: 
+Ambient Left: 10
+Layer 1: 7
+Ambient Right: 10
+Removing Layer
+
+LAYERS: 
+Ambient Left: 10
+Ambient Right: 10
+Inserting Layer
+     Instanciating Layer
+
+LAYERS: 
+Ambient Left: 10
+Layer 1: 7
+Ambient Right: 10
+
+Building Maxwell
+Number of Layers: 3
+Dimension of 1st layer Maxwell: (4, 4)
+Dimension of 2nd layer Maxwell: (4, 4)
+Dimension of 3rd layer Maxwell: (4, 4)
+Omega: 0.398
+(k1,k2): (0.5,0.22)
+
+Maxwells:
+[[-0.+0.j        0.+0.j        0.+0.276382j -0.-0.230141j]
+ [-0.+0.j       -0.+0.j       -0.-1.470392j -0.-0.276382j]
+ [-0.-0.276382j -0.-2.555859j -0.+0.j        0.+0.j      ]
+ [ 0.+0.475392j  0.+0.276382j  0.+0.j       -0.+0.j      ]]
+[[-0.+0.j        0.+0.j        0.+0.276382j  0.+0.963859j]
+ [-0.+0.j       -0.+0.j       -0.-0.276392j -0.-0.276382j]
+ [-0.-0.276382j  0.+0.031141j -0.+0.j        0.+0.j      ]
+ [ 0.+3.062392j  0.+0.276382j  0.+0.j       -0.+0.j      ]]
+[[-0.+0.j        0.+0.j        0.+0.276382j -0.-0.230141j]
+ [-0.+0.j       -0.+0.j       -0.-1.470392j -0.-0.276382j]
+ [-0.-0.276382j -0.-2.555859j -0.+0.j        0.+0.j      ]
+ [ 0.+0.475392j  0.+0.276382j  0.+0.j       -0.+0.j      ]]
+
+Calculating Eigen Problem
+For layer 1
+Time to calculate Eigensystem: 0.00089 seconds
+Values:
+[ 0.      -1.904253j  0.360895-0.j       -0.360895+0.j
+  0.      +1.904253j]
+Vectors:
+[[-0.121293+0.j       -0.      -0.61281j   0.      +0.61281j
+   0.121293-0.j      ]
+ [ 0.600474-0.j        0.      +0.044209j  0.      -0.044209j
+  -0.600474+0.j      ]
+ [ 0.788343+0.j       -0.156218-0.j       -0.156218+0.j
+   0.788343+0.j      ]
+ [-0.056872+0.j        0.773373+0.j        0.773373+0.j
+  -0.056872+0.j      ]]
+For layer 2
+Time to calculate Eigensystem: 0.00047 seconds
+Values:
+[ 0.      -1.673912j  0.      +1.673912j  0.107923+0.j
+ -0.107923+0.j      ]
+Vectors:
+[[-0.482924-0.j        0.482924+0.j       -0.083137-0.j
+  -0.083137+0.j      ]
+ [ 0.128803+0.j       -0.128803-0.j        0.872776+0.j
+   0.872776+0.j      ]
+ [-0.082132+0.j       -0.082132-0.j       -0.      +0.464742j
+  -0.      -0.464742j]
+ [ 0.862234+0.j        0.862234+0.j       -0.      -0.123954j
+   0.      +0.123954j]]
+For layer 3
+Time to calculate Eigensystem: 0.00039 seconds
+Values:
+[ 0.      -1.904253j  0.360895-0.j       -0.360895+0.j
+  0.      +1.904253j]
+Vectors:
+[[-0.121293+0.j       -0.      -0.61281j   0.      +0.61281j
+   0.121293-0.j      ]
+ [ 0.600474-0.j        0.      +0.044209j  0.      -0.044209j
+  -0.600474+0.j      ]
+ [ 0.788343+0.j       -0.156218-0.j       -0.156218+0.j
+   0.788343+0.j      ]
+ [-0.056872+0.j        0.773373+0.j        0.773373+0.j
+  -0.056872+0.j      ]]
+
+Calculating Modes
+Ambient Left Modes:
+c*[[ 22.017091   0.769142   0.769142 -22.088138]]
+Layer 1 Modes:
+c*[[-0.123874  0.584368  0.789639  0.789639]]
+Ambient Right Modes:
+c*[[ 22.017091   0.769142   0.769142 -22.088138]]
+[matrix([[4, 4]]), matrix([[4, 4]])]
+Final Constants: 
+[[ 1.      ]
+ [-0.      ]
+ [-0.666327]
+ [ 3.544958]
+ [ 0.      ]
+ [ 0.      ]
+ [-0.      ]
+ [ 0.      ]
+ [ 0.      ]
+ [-0.      ]
+ [-0.      ]
+ [-0.      ]]
+With incoming coefficients (-1, 0) on the left and (0, 0) on the right
+Solutions:
+[-22.017091   0.        -0.212577 -10.500523]
+[-0.  0.  0.  0.]
+[ 0.  0.  0. -0.]
+Sum of solutions in all layers is 0: True
+
+End of test
+
+
+Ran test in: 0.0345 seconds

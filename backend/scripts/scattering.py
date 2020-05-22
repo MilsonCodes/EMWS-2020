@@ -52,6 +52,7 @@ class Structure:
         l = self.Layer(name, length, epsilon, mu)
         self.layers.append(l)
 
+    # Method for inserting a layer into given index n
     def insertLayer(self, name, length, epsilon, mu, n):
         print('Inserting Layer')
         l = self.Layer(name, length, epsilon, mu)
@@ -62,7 +63,6 @@ class Structure:
         print('\nBuilding Maxwell')
         maxwell_matrices = []
         for layer in self.layers:
-            # layer = layers[num]
             e = layer.epsilon
             u = layer.mu
             k1 = self.k1
@@ -97,16 +97,11 @@ class Structure:
                                         [m21,  m22, m23, m24],
                                         [m31,  m32, m33, m34],
                                         [m41,  m42, m43, m44]])
-            # maxwell_matrix = map(lambda x: x * omega, maxwell_matrix)
-            # maxwell_matrix = map(lambda x: map(
-            #     lambda y: complex(y, 1), x), maxwell_matrix)
             maxwell_matrices.append(maxwell_matrix)
-            # m = list(maxwell_matrix)
-            # print("layer" + str(num+1) + ": ")
-            # print("\n")
         self.maxwell = maxwell_matrices
         return maxwell_matrices
 
+    # Calculate the eigenproblem for all layers of the structure
     def calcEig(self):
         print('\nCalculating Eigen Problem')
         for n in range(len(self.layers)):
@@ -120,6 +115,7 @@ class Structure:
             print(f'Values:\n{self.layers[n].eigVal}')
             print(f'Vectors:\n{self.layers[n].eigVec}')
 
+    # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
         print('\nCalculating Modes')
         for layer in self.layers:
@@ -134,22 +130,28 @@ class Structure:
         for m in self.maxwell:
             print(m)
 
+    # The structure string method
     def __str__(self):
         return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
     
+    # TODO
     def calcTransfer(self):
         transfers = [np.matrix((4,4))] * (self.num-1)
         self.transferMatrices = transfers
     
+    # Calculate constants needed for continuity, given 4 incoming coefficients
     def calcConstants(self, c1, c2, c3, c4):
+        # Initialize constant vector, 4 constants per layer
         c = np.zeros((self.num*4,1))
+        # Set given constants
         c[0][0] = c1
         c[1][0] = c2
         c[self.num*4-2][0] = c3
         c[self.num*4-1][0] = c4
-        a = np.zeros((self.num*4,self.num*4))
+        # Create a copy of the constants
         f = c
-
+        # Initialize empty (all 0) scattering matrix
+        a = np.zeros((self.num*4,self.num*4))
         # Set scattering matrix
         # TODO: Create scattering matrix in seperate function
         for n in range(self.num):
@@ -158,6 +160,7 @@ class Structure:
                 for j in range(4):
                     # Set the diagonals of A equal to the maxwell for each layer
                     a[i+aug][j+aug] = self.maxwell[n].A[i][j].imag
+                    # TODO: Implement the transfer matrices properly
                     #if n != self.num-1:
                         # Set the off diagonal entries equal to the complex conjugate
                     #    a[i+aug][j+4+aug] = -self.maxwell[n+1].real.getH().item((i,j))
@@ -172,16 +175,20 @@ class Structure:
         x = solve(a,f)
         for i in range(self.num):
             for j in range(4):
+                # Set solution equal to the mode times the constant
                 sol = self.layers[i].modes[0][j] * f[i*4+j][0]
+                # Store solution in the structure layer
                 self.layers[i].solution[j] = sol 
         return x
    
+    # Get all the solutions for the structure
     def solution(self):
         solutions = []
         for n in range(self.num):
             solutions.append(self.layers[n].solution)
         return solutions
 
+    # Check the sum of all the solutions is 0
     def checkSol(self):
         total = 0
         sol = self.solution()
@@ -189,8 +196,7 @@ class Structure:
             for i in range(4):
                 total =+ sol[n][i]
                 
-        return total
-
+        return total == 0
 
     def printSol(self):
         print('Solutions:')
@@ -243,11 +249,11 @@ def test():
     print('Final Constants: \n' + str(s.calcConstants(c1,c2,c3,c4)))
     print('With incoming coefficients (' + str(c1)+ ', ' + str(c2)+ ') on the left and (' + str(c3)+ ', ' + str(c4)+ ') on the right')
     s.printSol()
-    print('Sum of solutions in all layers: ' + str(s.checkSol()))
+    print('Sum of solutions in all layers is 0: ' + str(s.checkSol()))
     print('\nEnd of test\n\n')
     
     
 start = time.perf_counter()
-#test()
+test()
 end = time.perf_counter()
-#print(f'Ran test in: {end-start:0.4f} seconds')
+print(f'Ran test in: {end-start:0.4f} seconds')
