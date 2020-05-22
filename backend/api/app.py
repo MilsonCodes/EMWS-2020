@@ -9,16 +9,19 @@ import numpy
 # Run server by calling python app.py
 app = Flask(__name__)
 
+# Base route example
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
+# Function to encode complex numbers into tuples to allow for json serialization
 def encode_complex(z):
     try:
         return (z.real, z.imag)
     except:
-        return z
+        return (z, 0)
 
+# Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
     n = [[0, 0, 0, 0],
          [0, 0, 0, 0],
@@ -29,15 +32,18 @@ def encode_maxwell(m):
             n[i][j] = encode_complex(m.item(i,j))
     return n
 
+# Function to replace all elements of a 4 item vector
 def encode_eigen(m):
     n = [0, 0, 0, 0]
     for i in range(len(m)):
         n[i] = encode_complex(m[i])
     return n
 
+# Route for creating a crystal structure and calculating eigen problem
 @app.route('/structure/modes', methods=['POST'])
 def modes():
     assert request.method == 'POST'
+    # Parse data
     req = json.loads(request.data)
     omega = req['omega']
     k1 = req['k1']
