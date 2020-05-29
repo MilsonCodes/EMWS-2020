@@ -1,10 +1,15 @@
 import math
 import time
 import numpy as np
-from scipy.linalg import null_space, solve
+from scipy.linalg import null_space, solve, lstsq
+from numpy.linalg import inv
 
 # Set precision for printing arrays
 np.set_printoptions(precision=6, suppress=True)
+
+def expDiagonal(eigVals, zNorm):
+    tmp = [eigVals[0], eigVals[1], eigVals[2], eigVals[3]]
+    return np.diag(np.exp(np.multiply(tmp,zNorm)))
 
 # Classes for storing structure data
 class Structure:
@@ -18,7 +23,7 @@ class Structure:
             self.length = length
             self.epsilon = epsilon
             self.mu = mu
-            self.solution = np.zeros(4)
+            self.solution = np.zeros(4, dtype=complex)
 
         def __str__(self):
             try:
@@ -36,6 +41,7 @@ class Structure:
         self.k1 = k1/self.kap
         self.k2 = k2/self.kap
         self.layers = []
+        self.transferMatrices = []
 
     def printLayers(self):
         print('\nLAYERS: ')
@@ -119,7 +125,7 @@ class Structure:
     def calcModes(self):
         print('\nCalculating Modes')
         for layer in self.layers:
-            mode = np.zeros((1,4))
+            mode = np.zeros((1,4), dtype=complex)
             for n in range(4):
                 mode += np.real(layer.eigVec[n]) * math.exp(np.real(layer.eigVal[n]) * layer.length)
             layer.modes = mode
@@ -130,56 +136,73 @@ class Structure:
         for m in self.maxwell:
             print(m)
 
-    # The structure string method
-    def __str__(self):
-        return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
-    
-    # TODO
     def calcTransfer(self):
-        transfers = [np.matrix((4,4))] * (self.num-1)
-        self.transferMatrices = transfers
-    
-    # Calculate constants needed for continuity, given 4 incoming coefficients
+        interfaces = self.num-1
+        transferMatrices = [] * interfaces
+        if (self.num > 1):
+            for i in range(interfaces):
+                wNext = inv(np.transpose(self.layers[i+1].eigVec))
+                w = np.transpose(self.layers[i].eigVec)
+                if (i == 0):
+                    zNorm = 0
+                else:
+                    zNorm = self.omega * self.layers[i].length
+                expDia = expDiagonal(self.layers[i].eigVal, zNorm)
+                tmp = w * expDia
+                transferMatrices.append(wNext*tmp)
+        self.transferMatrices = transferMatrices
+
+    def calcScattering(self):
+        self.calcTransfer()
+        transfers = self.transferMatrices
+        s = np.zeros((len(transfers)*4,len(transfers)*4), dtype=complex)
+        for i in range((len(transfers)*4)-2):
+            s[i][i+2] = -1
+        for i in range(3):
+            for j in range(1):
+                s[i][j] = transfers[0].item(i,j+2)
+        for i in range(len(transfers)-1):
+            for j in range(3):
+                for k in range(3):
+                    if(i == 1):
+                        s[4*i+j][2*i+k] = transfers[i].item(j,k)
+                    else:
+                        s[4*i+j][4*i+k-2] = transfers[i].item(j,k)
+        self.scattering = s
+
     def calcConstants(self, c1, c2, c3, c4):
-        # Initialize constant vector, 4 constants per layer
-        c = np.zeros((self.num*4,1))
-        # Set given constants
-        c[0][0] = c1
-        c[1][0] = c2
-        c[self.num*4-2][0] = c3
-        c[self.num*4-1][0] = c4
-        # Create a copy of the constants
-        f = c
-        # Initialize empty (all 0) scattering matrix
-        a = np.zeros((self.num*4,self.num*4))
-        # Set scattering matrix
-        # TODO: Create scattering matrix in seperate function
-        for n in range(self.num):
-            aug = 4 * n
-            for i in range(4):
-                for j in range(4):
-                    # Set the diagonals of A equal to the maxwell for each layer
-                    a[i+aug][j+aug] = self.maxwell[n].A[i][j].imag
-                    # TODO: Implement the transfer matrices properly
-                    #if n != self.num-1:
-                        # Set the off diagonal entries equal to the complex conjugate
-                    #    a[i+aug][j+4+aug] = -self.maxwell[n+1].real.getH().item((i,j))
-        
-        # Calculate constants
-        for n in range(4):
-            f[n][0] = f[n][0] - ((a[n][0]*c1) - (a[n][1]*c2))
-            m = 4 * (self.num-1) + n
-            i = 4 * (self.num-1) - 2
-            j = 4 * (self.num-1) - 1
-            f[m][0] = f[m][0] - ((a[m][i]*c3) - (a[m][j]*c4))
-        x = solve(a,f)
+        self.calcScattering()
+        layers = self.num
+        interfaces = layers-1
+        s = np.zeros((4*interfaces,4*interfaces), dtype=complex)
+        f = np.zeros(4*interfaces, dtype=complex)
+        scattering = self.scattering
+        for i in range(4*interfaces-1):
+            for j in range(4*interfaces-1):
+                s[i][j] = scattering[i][j]
+        for i in range(3):
+            f[i] = f[i] - (scattering[i][0]*c1 - scattering[i][1]*c2)
+            aug = 4 * (interfaces-1) + i
+            aug1 = 4 * (interfaces-1) - 1 # Originally +1
+            aug2 = 4 * (interfaces-1) - 2 # Originally +1
+            f[aug] = f[aug] - (scattering[aug][aug2]*c3 - scattering[aug][aug1]*c4)
+        bPrime = lstsq(s, f)[0] # May want to use solve instead
+        # dtype = np.dtype([('re', np.float), ('im', np.float)]) # Custom data type
+        b = np.zeros(4*layers, dtype=complex)
+        b[0] = c1
+        b[1] = c2
+        b[2] = c3
+        b[3] = c4
+        for i in range((4*interfaces)-1):
+            b[i+2] = bPrime[i]
+        self.constants = b
         for i in range(self.num):
-            for j in range(4):
+            for j in range(3):
                 # Set solution equal to the mode times the constant
-                sol = self.layers[i].modes[0][j] * f[i*4+j][0]
+                sol = self.layers[i].modes[0][j] * b[i*4+j]
                 # Store solution in the structure layer
                 self.layers[i].solution[j] = sol 
-        return x
+        return b
    
     # Get all the solutions for the structure
     def solution(self):
@@ -202,6 +225,11 @@ class Structure:
         print('Solutions:')
         for s in self.solution():
             print(s)
+
+    # The structure string method
+    def __str__(self):
+        return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'
+
 
 # Test code
 def test():
@@ -240,15 +268,15 @@ def test():
     s.printMaxwell()
     s.calcEig()
     s.calcModes()
-    s.calcTransfer()
-    print(s.transferMatrices)
     c1 = -1
     c2 = 0
     c3 = 0
     c4 = 0
-    print('Final Constants: \n' + str(s.calcConstants(c1,c2,c3,c4)))
+    const = s.calcConstants(c1,c2,c3,c4)
+    print('Final Constants: \n' + str(const))
     print('With incoming coefficients (' + str(c1)+ ', ' + str(c2)+ ') on the left and (' + str(c3)+ ', ' + str(c4)+ ') on the right')
     s.printSol()
+    print('Final Scattering Matrix:\n' + str(s.scattering))
     print('Sum of solutions in all layers is 0: ' + str(s.checkSol()))
     print('\nEnd of test\n\n')
     
