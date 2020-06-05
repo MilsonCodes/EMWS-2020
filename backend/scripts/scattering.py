@@ -151,48 +151,81 @@ class Structure:
                 tmp = w * expDia
                 transferMatrices.append(wNext*tmp)
         self.transferMatrices = transferMatrices
+        return transferMatrices
+
+    def interfaces(self):
+        interfaces = []
+        interfaces.append(-self.layers[0].length)
+        for i in range(self.num-1):
+            interfaces.append(interfaces[i] + self.layers[0].length)
+        return interfaces
 
     def calcScattering(self):
-        self.calcTransfer()
-        transfers = self.transferMatrices
-        s = np.zeros((len(transfers)*4,len(transfers)*4), dtype=complex)
-        for i in range((len(transfers)*4)-2):
-            s[i][i+2] = -1
-        for i in range(3):
-            for j in range(1):
-                s[i][j] = transfers[0].item(i,j+2)
-        for i in range(len(transfers)-1):
+        layers = self.num
+        I = layers - 1
+        s = np.zeros((4*I,4*layers), dtype=complex)
+        interfaces = np.zeros(I)
+        ifaces = self.interfaces()
+        leftPsi = [None] * I
+        rightPsi = [None] * I
+        for i in range(I):
+            if i < I:
+                interfaces[i] = 0
+            else:
+                interfaces[i] = ifaces[i] - ifaces[i-1]
+        for i in range(I-1):
+            expVecLeft = np.exp(np.multiply(self.layers[i].eigVal, np.subtract(interfaces[i+1],interfaces[i])))
+            expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, np.subtract(interfaces[i+1],interfaces[i+1])))
+            leftPsi[i] = np.multiply(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
+            rightPsi[i] = np.multiply(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
+        for i in range(I-1):
             for j in range(3):
                 for k in range(3):
-                    if(i == 1):
-                        s[4*i+j][2*i+k] = transfers[i].item(j,k)
-                    else:
-                        s[4*i+j][4*i+k-2] = transfers[i].item(j,k)
+                    s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
+                    s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
         self.scattering = s
+        return s
+        #transfers = self.calcTransfer()
+        #s = np.zeros((len(transfers)*4,len(transfers)*4), dtype=complex)
+        #for i in range((len(transfers)*4)-2):
+        #    s[i][i+2] = -1
+        #for i in range(3):
+        #    for j in range(1):
+        #        s[i][j] = transfers[0].item(i,j+2)
+        #for i in range(len(transfers)-1):
+        #    for j in range(3):
+        #        for k in range(3):
+        #            if(i == 1):
+        #                s[4*i+j][2*i+k] = transfers[i].item(j,k)
+        #            else:
+        #                s[4*i+j][4*i+k-2] = transfers[i].item(j,k)
+        #self.scattering = s
+        #return s
 
     def calcConstants(self, c1, c2, c3, c4):
-        self.calcScattering()
+        scattering = self.calcScattering()
         layers = self.num
         interfaces = layers-1
         s = np.zeros((4*interfaces,4*interfaces), dtype=complex)
         f = np.zeros(4*interfaces, dtype=complex)
-        scattering = self.scattering
         for i in range(4*interfaces-1):
             for j in range(4*interfaces-1):
-                s[i][j] = scattering[i][j]
+                s[i][j] = scattering[i][j+2]
         for i in range(3):
-            f[i] = f[i] - (scattering[i][0]*c1 - scattering[i][1]*c2)
+            #f[i] = f[i] - (scattering[i][0]*c1 - scattering[i][1]*c2)
+            f[i] = np.subtract(f[i], np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
             aug = 4 * (interfaces-1) + i
-            aug1 = 4 * (interfaces-1) - 1 # Originally +1
-            aug2 = 4 * (interfaces-1) - 2 # Originally +1
-            f[aug] = f[aug] - (scattering[aug][aug2]*c3 - scattering[aug][aug1]*c4)
+            aug1 = 4 * (interfaces+1) - 1 
+            aug2 = 4 * (interfaces+1) - 2 
+            #f[aug] = f[aug] - (scattering[aug][aug2]*c3 - scattering[aug][aug1]*c4)
+            f[aug] = np.subtract(f[aug], np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
         bPrime = lstsq(s, f)[0] # May want to use solve instead
         # dtype = np.dtype([('re', np.float), ('im', np.float)]) # Custom data type
-        b = np.zeros(4*layers, dtype=complex)
+        b = np.zeros(4*layers, dtype=complex) # Constants vector
         b[0] = c1
         b[1] = c2
-        b[2] = c3
-        b[3] = c4
+        b[4*layers-2] = c3
+        b[4*layers-1] = c4
         for i in range((4*interfaces)-1):
             b[i+2] = bPrime[i]
         self.constants = b
