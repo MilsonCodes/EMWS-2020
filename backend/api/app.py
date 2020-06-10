@@ -21,6 +21,16 @@ def encode_complex(z):
     except:
         return (z, 0)
 
+def decode_complex((x,y)):
+    z
+    try:
+        z.real = x
+        z.imag = y
+        return z
+    except:
+        z.real = x
+        return z
+
 # Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
     n = [[0, 0, 0, 0],
@@ -32,11 +42,28 @@ def encode_maxwell(m):
             n[i][j] = encode_complex(m.item(i,j))
     return n
 
+def decode_maxwell(m):
+    n = [[0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0],
+         [0, 0, 0, 0]]
+    for i in range(4):
+        for j in range(4):
+            n[i][j] = decode_complex(m.item(i,j))
+    return n
+
+
 # Function to replace all elements of a 4 item vector
 def encode_eigen(m):
     n = [0, 0, 0, 0]
     for i in range(len(m)):
         n[i] = encode_complex(m[i])
+    return n
+
+def encode_eigen(m):
+    n = [0, 0, 0, 0]
+    for i in range(len(m)):
+        n[i] = decode_complex(m[i])
     return n
 
 # Route for creating a crystal structure and calculating eigen problem
