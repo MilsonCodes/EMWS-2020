@@ -156,31 +156,35 @@ class Structure:
     def interfaces(self):
         interfaces = []
         interfaces.append(-self.layers[0].length)
-        for i in range(self.num-1):
-            interfaces.append(interfaces[i] + self.layers[0].length)
+        for i in range(self.num):
+            interfaces.append(interfaces[i] + self.layers[i].length)
         return interfaces
 
     def calcScattering(self):
         layers = self.num
         I = layers - 1
         s = np.zeros((4*I,4*layers), dtype=complex)
-        interfaces = np.zeros(I)
+        interfaces = np.zeros(layers)
         ifaces = self.interfaces()
-        leftPsi = [None] * I
-        rightPsi = [None] * I
-        for i in range(I):
+        leftPsi = [np.zeros(4)] * I
+        rightPsi = [np.zeros(4)] * I
+        for i in range(layers):
             if i < I:
                 interfaces[i] = 0
             else:
                 interfaces[i] = ifaces[i] - ifaces[i-1]
-        for i in range(I-1):
+        for i in range(I):
             expVecLeft = np.exp(np.multiply(self.layers[i].eigVal, np.subtract(interfaces[i+1],interfaces[i])))
             expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, np.subtract(interfaces[i+1],interfaces[i+1])))
+            print('left:' + str(expVecLeft))
+            print('right:' + str(expVecRight))
             leftPsi[i] = np.multiply(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
             rightPsi[i] = np.multiply(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
-        for i in range(I-1):
-            for j in range(3):
-                for k in range(3):
+        print('Lpsi:' + str(leftPsi))
+        print('Rpsi:' + str(rightPsi))
+        for i in range(I):
+            for j in range(4):
+                for k in range(4):
                     s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
                     s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
         self.scattering = s
@@ -208,29 +212,30 @@ class Structure:
         interfaces = layers-1
         s = np.zeros((4*interfaces,4*interfaces), dtype=complex)
         f = np.zeros(4*interfaces, dtype=complex)
-        for i in range(4*interfaces-1):
-            for j in range(4*interfaces-1):
+        for i in range(4*interfaces):
+            for j in range(4*interfaces):
                 s[i][j] = scattering[i][j+2]
-        for i in range(3):
-            #f[i] = f[i] - (scattering[i][0]*c1 - scattering[i][1]*c2)
-            f[i] = np.subtract(f[i], np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
+        for i in range(4):
+            f[i] = np.subtract(f.item(i), np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
             aug = 4 * (interfaces-1) + i
             aug1 = 4 * (interfaces+1) - 1 
             aug2 = 4 * (interfaces+1) - 2 
-            #f[aug] = f[aug] - (scattering[aug][aug2]*c3 - scattering[aug][aug1]*c4)
-            f[aug] = np.subtract(f[aug], np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
-        bPrime = lstsq(s, f)[0] # May want to use solve instead
-        # dtype = np.dtype([('re', np.float), ('im', np.float)]) # Custom data type
+            f[aug] = np.subtract(f.item(aug), np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
+        bPrime = solve(s,f)
+        #bPrime = lstsq(s, f)[0] # May want to use solve instead
+        print('s:' + str(s))
+        print('f:' + str(f))
+        print('b`:' + str(bPrime))
         b = np.zeros(4*layers, dtype=complex) # Constants vector
         b[0] = c1
         b[1] = c2
         b[4*layers-2] = c3
         b[4*layers-1] = c4
-        for i in range((4*interfaces)-1):
+        for i in range(4*interfaces):
             b[i+2] = bPrime[i]
         self.constants = b
         for i in range(self.num):
-            for j in range(3):
+            for j in range(4):
                 # Set solution equal to the mode times the constant
                 sol = self.layers[i].modes[0][j] * b[i*4+j]
                 # Store solution in the structure layer
@@ -306,12 +311,12 @@ def test():
     c3 = 0
     c4 = 0
     const = s.calcConstants(c1,c2,c3,c4)
-    print('Final Constants: \n' + str(const))
     print('With incoming coefficients (' + str(c1)+ ', ' + str(c2)+ ') on the left and (' + str(c3)+ ', ' + str(c4)+ ') on the right')
     s.printSol()
-    print('Final Scattering Matrix:\n' + str(s.scattering))
+    print('\nFinal Constants: \n' + str(const))
+    print('\nFinal Scattering Matrix:\n' + str(s.scattering))
     print('Sum of solutions in all layers is 0: ' + str(s.checkSol()))
-    print('\nEnd of test\n\n')
+    print('\n\nEnd of test\n\n')
     
     
 start = time.perf_counter()
