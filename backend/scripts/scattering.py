@@ -17,7 +17,11 @@ def swapArrayIndices(a, i, j):
     return a
 
 def swapMatrixRows(a, i, j):
-    a[[i, j]] = a[[j,i]]
+    #a[[i, j]] = a[[j,i]]
+    print('row swap ' + str(i) + ' and ' + str(j))
+    print(a)
+    a[:,[i,j]] = a[:,[j,i]]
+    print(a)
     return a
 
 def isNumZero(num):
@@ -25,13 +29,13 @@ def isNumZero(num):
     return (num < precision and num > -precision) or num == 0
 
 def organizeEigen(val, vec):
-    print(val)
+    #print(val)
     for i in range(4):
         v = val[i]
         if (not isNumZero(v.imag)) and (isNumZero(v.real)):
-            print('Eigenvalue ' + str(v) + ' is imaginary')
+            #print('Eigenvalue ' + str(v) + ' is imaginary')
             if (v.imag > 0) and (not i == 0):
-                print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to front!')
+                #print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to front!')
                 val = swapArrayIndices(val, i, 0)
                 vec = swapMatrixRows(vec, i, 0)
             #elif (v.imag < 0) and (not i == 2):
@@ -39,9 +43,9 @@ def organizeEigen(val, vec):
             #    val = swapArrayIndices(val, i, 2)
             #    vec = swapMatrixRows(vec, i, 2)
         elif (isNumZero(v.imag)) and (not isNumZero(v.real)):
-            print('Eigenvalue ' + str(v) + ' is real')
+            #print('Eigenvalue ' + str(v) + ' is real')
             if (v.real < 0) and (not i == 1):
-                print('Eigenvalue ' + str(v) + ' is negative real. Swapping to second index!')
+                #print('Eigenvalue ' + str(v) + ' is negative real. Swapping to second index!')
                 val = swapArrayIndices(val, i, 1)
                 vec = swapMatrixRows(vec, i, 1)
             #elif (v.real > 0) and (not i == 3):
@@ -51,12 +55,11 @@ def organizeEigen(val, vec):
     t1 = val[2]
     t2 = val[3]
     if (isNumZero(t1.imag)) and (not isNumZero(t1.real)):
-        print('Third entry is real')
+        #print('Third entry is real')
         if (t1.real > 0):
-            print('Third entry is positive real')
+            #print('Third entry is positive real')
             val = swapArrayIndices(val, 2, 3)
             vec = swapMatrixRows(vec, 2, 3)
-    print(val)
     return val, vec
 
 # Classes for storing structure data
@@ -150,7 +153,7 @@ class Structure:
             maxwell_matrix = np.matrix([[m11,  m12, m13, m14],
                                         [m21,  m22, m23, m24],
                                         [m31,  m32, m33, m34],
-                                        [m41,  m42, m43, m44]])
+                                        [m41,  m42, m43, m44]], dtype=complex)
             maxwell_matrices.append(maxwell_matrix)
         self.maxwell = maxwell_matrices
         return maxwell_matrices
@@ -169,9 +172,9 @@ class Structure:
             end = time.perf_counter()
             print(f'Time to calculate Eigensystem: {end-start:0.5f} seconds')
             self.layers[n].eigVal = eigVal
-            self.layers[n].eigVec = eigVec
+            self.layers[n].eigVec = -np.multiply(eigVec, complex(0,1))
             print(f'Values:\n{self.layers[n].eigVal}')
-            print(f'Vectors:\n{self.layers[n].eigVec}')
+            print(f'Vectors:\n{np.transpose(self.layers[n].eigVec)}')
 
     # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
