@@ -158,7 +158,10 @@ class Structure:
         self.maxwell = maxwell_matrices
         return maxwell_matrices
 
-
+    # Import maxwell matrices into struct
+    def importMatrices(self, matrices):
+        print('\nImporting Maxwell from Data')
+        self.maxwell = matrices
 
     # Calculate the eigenproblem for all layers of the structure
     def calcEig(self):
@@ -175,6 +178,13 @@ class Structure:
             self.layers[n].eigVec = -np.multiply(eigVec, complex(0,1))
             print(f'Values:\n{self.layers[n].eigVal}')
             print(f'Vectors:\n{np.transpose(self.layers[n].eigVec)}')
+
+    # Import preexisting eigendata
+    def importEig(self, e_vals, e_vecs):
+        print('\nImporting previously created eigendata')
+        for n in range(len(self.layers)):
+            self.layers[n].eigVal = e_vals[n]
+            self.layers[n].eigVec = e_vecs[n]
 
     # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
