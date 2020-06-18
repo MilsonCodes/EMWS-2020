@@ -317,6 +317,63 @@ class Structure:
         for s in self.solution():
             print(s)
 
+    # Determine the field of a structure
+    def determineField(self, num_points=200):
+        num_layers = self.num
+        z_ends = self.interfaces()
+        interfaces = [0] * num_layers
+        z_arr = []
+        Ex = []
+        Ey = []
+        Hx = []
+        Hy = []
+
+        for z in range(num_layers):
+            if z < num_layers - 1:
+                interfaces[z] = 0
+            else:
+                interfaces[z] = z_ends[z] - z_ends[z-1]
+
+        for layer in range(num_layers):
+            length = z_ends[layer+1] - z_ends[layer]
+
+            current_c = self.constants[layer*4:4+(layer*4)]
+
+            print("Constant vector at layer " + str(layer))
+            print(current_c)
+
+            for i in range(num_points):
+                z = z_ends[layer] + (i * length) / num_points
+
+                piScalar = np.pi * 0.4
+
+                scalar = np.exp(np.multiply(np.complex(0.0, 1.0), piScalar))
+                scalarMat = np.multiply(scalar, self.layers[layer].eigVec.transpose())
+                expDiag = np.diag(np.exp(np.multiply(self.layers[layer].eigVal, (z - interfaces[layer]))))
+                expMat = np.matmul(scalarMat, expDiag)
+                fieldVec = np.matmul(expMat, current_c)
+
+                if i == 0:
+                    print("Field vec at " + str(z))
+                    print(fieldVec)
+
+                z_arr.append(z)
+                Ex.append(fieldVec.item(0, 0).real)
+                Ey.append(fieldVec.item(0, 1).real)
+                Hx.append(fieldVec.item(0, 2).real)
+                Hy.append(fieldVec.item(0, 3).real)
+
+        field = {
+            'z': z_arr,
+            'Ex': Ex,
+            'Ey': Ey,
+            'Hx': Hx,
+            'Hy': Hy
+        }
+
+        self.field = field
+        return field
+
     # The structure string method
     def __str__(self):
         return 'Omega: ' + str(self.omega) + '\n(k1,k2): (' + str(self.k1*self.omega) + ',' + str(self.k2*self.omega) + ')\n'

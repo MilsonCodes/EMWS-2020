@@ -237,6 +237,15 @@ def field():
     data['scattering'] = encode_scattering(struct.scattering)
     data['constants'] = encode_constants(struct.constants)
 
+    num_points = None
+    try:
+        num_points = req['num_points']
+    except Exception:
+        num_points = 200
+
+    field = struct.determineField(num_points)
+    data['field'] = field
+
     return json.jsonify(data)
 
 
