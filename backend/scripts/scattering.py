@@ -12,16 +12,14 @@ def expDiagonal(eigVals, zNorm):
     return np.diag(np.exp(np.multiply(tmp,zNorm)))
 
 def swapArrayIndices(a, i, j):
-    print('Swapping ' + str(a[i]) + ' and ' + str(a[j]))
+    #print('Swapping ' + str(a[i]) + ' and ' + str(a[j]))
     a[i], a[j] = a[j], a[i]
     return a
 
 def swapMatrixRows(a, i, j):
     #a[[i, j]] = a[[j,i]]
-    print('row swap ' + str(i) + ' and ' + str(j))
-    print(a)
+    #print('row swap ' + str(i) + ' and ' + str(j))
     a[:,[i,j]] = a[:,[j,i]]
-    print(a)
     return a
 
 def isNumZero(num):
@@ -172,9 +170,9 @@ class Structure:
             end = time.perf_counter()
             print(f'Time to calculate Eigensystem: {end-start:0.5f} seconds')
             self.layers[n].eigVal = eigVal
-            self.layers[n].eigVec = -np.multiply(eigVec, complex(0,1))
+            self.layers[n].eigVec = np.transpose(eigVec)
             print(f'Values:\n{self.layers[n].eigVal}')
-            print(f'Vectors:\n{np.transpose(self.layers[n].eigVec)}')
+            print(f'Vectors:\n{self.layers[n].eigVec}')
 
     # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
@@ -229,23 +227,17 @@ class Structure:
             else:
                 interfaces[i] = ifaces[i] - ifaces[i-1]
         for i in range(I):
-            print(self.layers[i].eigVal)
-            print(self.layers[i].eigVal.transpose())
-            print(interfaces[i+1] - interfaces[i])
-            print(np.subtract(interfaces[i+1],interfaces[i]))
             expVecLeft = np.exp(np.multiply(self.layers[i].eigVal,(interfaces[i+1] - interfaces[i])))
             expVecRight = np.exp(self.layers[i+1].eigVal * (interfaces[i+1] - interfaces[i+1]))
-            print('left:' + str(expVecLeft))
-            print('right:' + str(expVecRight))
+            # Correct up to here 6/18
             leftPsi[i] = np.multiply(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
             rightPsi[i] = np.multiply(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
-        print('Lpsi:' + str(leftPsi))
-        print('Rpsi:' + str(rightPsi))
         for i in range(I):
             for j in range(4):
                 for k in range(4):
                     s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
                     s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
+        print(leftPsi)
         self.scattering = s
         return s
         
