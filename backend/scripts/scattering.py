@@ -239,15 +239,13 @@ class Structure:
         for i in range(I):
             expVecLeft = np.exp(np.multiply(self.layers[i].eigVal,(interfaces[i+1] - interfaces[i])))
             expVecRight = np.exp(self.layers[i+1].eigVal * (interfaces[i+1] - interfaces[i+1]))
-            # Correct up to here 6/18
-            leftPsi[i] = np.multiply(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
-            rightPsi[i] = np.multiply(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
+            leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
+            rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
         for i in range(I):
             for j in range(4):
                 for k in range(4):
                     s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
                     s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
-        print(leftPsi)
         self.scattering = s
         return s
         
@@ -268,9 +266,6 @@ class Structure:
             f[aug] = np.subtract(f.item(aug), np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
         bPrime = solve(s,f)
         #bPrime = lstsq(s, f)[0] # May want to use solve instead
-        print('s:' + str(s))
-        print('f:' + str(f))
-        print('b`:' + str(bPrime))
         b = np.zeros(4*layers, dtype=complex) # Constants vector
         b[0] = c1
         b[1] = c2
