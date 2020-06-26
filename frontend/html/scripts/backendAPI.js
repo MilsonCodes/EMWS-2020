@@ -20,6 +20,9 @@ const request = async (route, body, request_type="POST", content_type="applicati
           'Content-Type': content_type
         }
       })
+
+      console.log(res)
+      break;
     } catch (e) {
       res = e.response
       numReqSent++
@@ -30,16 +33,22 @@ const request = async (route, body, request_type="POST", content_type="applicati
 }
 
 const convertComplexMatrixToPythonParsableMatrix = matrix => {
-  var newMat = matrix
+  var newMat = new Array(matrix.length)
 
   for(var i = 0; i < matrix.length; i++) {
-    for(var j = 0; j < matrix[i].length; i++) {
+    newMat[i] = new Array(matrix[i].length)
+
+    for(var j = 0; j < matrix[i].length; j++) {
       var val = matrix[i][j]
 
-      if(val.re || val.im)
-        newMat[i][j] = { re: val.re, im: val.im }
-      else
-        newMat[i][j] = val
+      if(val.re != 0 || val.im != 0) {
+        if(val.re != 0 && val.im == 0)
+          newMat[i][j] = val.re
+        else
+          newMat[i][j] = { re: val.re, im: val.im }
+      } else {
+        newMat[i][j] = 0
+      }
     }
   }
 
@@ -48,6 +57,8 @@ const convertComplexMatrixToPythonParsableMatrix = matrix => {
 
 const convertJSLayersToPythonLayers = layers => {
   var newLayers = []
+
+  console.log(layers)
 
   for(var i = 0; i < layers.length; i++) {
     var curLayer = layers[i]
@@ -63,12 +74,52 @@ const convertJSLayersToPythonLayers = layers => {
   return newLayers
 }
 
-backendAPI.buildStructure = async (omega, k1, k2, layers) => {
-  var data = {
-    omega, k1, k2, layers: convertJSLayersToPythonLayers(layers)
+//const convert
+
+backendAPI.createStructureObject = (omega, k1, k2, layers) => {
+  return new Structure(omega, k1, k2, layers)
+}
+
+class Structure {
+  constructor(omega, k1, k2, layers=[]) {
+    this.omega = omega
+    this.k1 = k1
+    this.k2 = k2
+    this.layers = layers
   }
 
-  var res = await request("structure/modes", data);
+  getOmega() {
+    return this.omega
+  }
 
-  return res
+  getk1() {
+    return this.k1
+  }
+
+  getk2() {
+    return this.k2
+  }
+
+  getLayers() {
+    return this.layers
+  }
+
+  async buildStructure() {
+    var data = { 
+      omega: this.omega,
+      k1: this.k1,
+      k2: this.k2,
+      layers: convertJSLayersToPythonLayers(this.layers)
+    }
+
+    var res = await request("structure/modes", data, "POST");
+
+    this.maxwell_matrices = res.maxwell_matrices
+    this.eigenvalues = res.eigenvalues
+    this.eigenvectors = res.eigenvectors
+  }
+
+  async getConstantVector() {
+    
+  }
 }
