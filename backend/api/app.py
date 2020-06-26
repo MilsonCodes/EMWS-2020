@@ -21,6 +21,22 @@ def encode_complex(z):
     except:
         return z
 
+def encode_vector(v):
+    vec = []
+    for n in range(len(v)):
+        vec.append(encode_complex(v[n]))
+    return vec
+
+# Encode 3d array
+def encode_matrix(m):
+    size = m.size
+    for i in range(size[0]):
+        for j in range(size[1]):
+            for k in range(size[2]):
+                m[i][j][k] = encode_complex(m[i][j][k])
+    return m
+                
+
 def decode_complex(val):
     z
     try:
@@ -248,6 +264,82 @@ def field():
 
     return json.jsonify(data)
 
+
+@app.route('/structure/constants', methods=['POST'])
+def constants():
+    assert request.method == 'POST'
+    # Parse data
+    req = json.loads(request.data)
+    omega = req['omega']
+    k1 = req['k1']
+    k2 = req['k2']
+    layers = req['layers']
+    try:
+        c = req['incoming']
+    except:
+        print('No incoming coeffecients found, using defaults.')
+        c = [1, 0, 0, 0]
+    maxwell = False
+    eigen = False
+    e_vals = []
+    e_vecs = []
+    num = len(layers)
+    struct = s(num, omega, k1, k2)
+    try:    
+        maxwells = decode_maxwell(req['maxwell'])
+        maxwell = True
+    except:
+        maxwells = []
+        print('No maxwell matrix included')
+    for layer in layers:
+        struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
+        try:
+            e_vals.append(decode_eigen(layer['eig_values']))
+            e_vecs.append(decode_evecs(layer['eig_vectors']))
+            eigen = True
+        except:
+            print('No eigen data included')
+    if (maxwell == False):
+        struct.buildMatrices()
+    else:
+        struct.maxwell = maxwells[n]
+    if (eigen == False):
+        struct.calcEig()
+    else:
+        struct.importEig(e_vals, e_vecs)
+    maxwells = []
+    e_vals = []
+    e_vecs = []
+    i = 0
+    for layer in struct.layers:
+        print(layer.eigVec)
+        m = encode_maxwell(struct.maxwell[i])
+        n = encode_eigen(layer.eigVal)
+        o = encode_evecs(layer.eigVec.tolist())
+
+        maxwells.append(m)
+        e_vals.append(n)
+        e_vecs.append(o)
+        i += 1
+
+    struct.calcModes()
+    const = struct.calcConstants(c[0], c[1], c[2], c[3])
+    constants = encode_vector(const)
+
+    scattering_matrix = []
+    for n in range(len(struct.scattering)):
+        scat = encode_vector(struct.scattering[n])
+        scattering_matrix.append(scat)
+
+    data = {
+        'maxwell_matrices': maxwells,
+        'eigenvalues': e_vals,
+        'eigenvectors': e_vecs,
+        'scattering': scattering_matrix,
+        'constants': constants
+    }
+
+    return json.jsonify(data)
 
 if __name__ == '__main__':
     app.run()
