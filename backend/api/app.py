@@ -9,10 +9,20 @@ import numpy
 # Run server by calling python app.py
 app = Flask(__name__)
 
+base = '''
+Welcome to the EMWS API!
+
+Source code and documentation can be found here:
+    https://github.com/MilsonCodes/EMWS-2020
+
+The live site can be found here:
+    https://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
+'''
+
 # Base route example
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return base
 
 # Function to encode complex numbers into tuples to allow for json serialization
 def encode_complex(z):
