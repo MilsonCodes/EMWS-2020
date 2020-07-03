@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask import request
 from flask import json
 import sys, os
@@ -22,7 +22,7 @@ The live site can be found here:
 # Base route example
 @app.route('/')
 def hello_world():
-    return base
+    return render_template('index.html')
 
 # Function to encode complex numbers into tuples to allow for json serialization
 def encode_complex(z):

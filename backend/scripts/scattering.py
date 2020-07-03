@@ -416,7 +416,8 @@ def test():
     print('\n\nEnd of test\n\n')
     
     
-start = time.perf_counter()
-test()
-end = time.perf_counter()
-print(f'Ran test in: {end-start:0.4f} seconds')
+def main():
+    start = time.perf_counter()
+    test()
+    end = time.perf_counter()
+    print(f'Ran test in: {end-start:0.4f} seconds')
