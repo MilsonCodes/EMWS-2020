@@ -119,7 +119,12 @@ class Structure {
     this.eigenvectors = res.eigenvectors
   }
 
-  async getConstantVector() {
-    
+  async getConstantVector(incoming=[1, 0, 0, 0]) {
+    var data = {
+      omega: this.omega,
+      k1: this.k1,
+      k2: this.k2,
+      layers: convertJSLayersToPythonLayers(this.layers)
+    }
   }
 }
