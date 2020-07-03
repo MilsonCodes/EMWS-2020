@@ -11,12 +11,12 @@ app = Flask(__name__)
 
 base = '''
 Welcome to the EMWS API!
-
+\n\n
 Source code and documentation can be found here:
-    https://github.com/MilsonCodes/EMWS-2020
-
+\n\thttps://github.com/MilsonCodes/EMWS-2020
+\n\n
 The live site can be found here:
-    https://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
+\n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
 '''
 
 # Base route example
