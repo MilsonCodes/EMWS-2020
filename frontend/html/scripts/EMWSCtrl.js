@@ -386,11 +386,16 @@ angular.module('myApp', []).controller('EMWSCtrl', function($scope) {
             }
         }
         /** Updates the Photonic Crystal. */
-        function updateCrystal(){
+        async function updateCrystal(){
             var k = [Number($scope.k1),Number($scope.k2),Number($scope.o)];
-            $scope.crystal = emScattering3.Driver(
-                    $scope.eArray,$scope.muArray,$scope.lArray,$scope.NumLayers,k,$scope.incoming);
-            };
+            $scope.crystal = emScattering3.Driver($scope.eArray,$scope.muArray,$scope.lArray,$scope.NumLayers,k,$scope.incoming);
+
+            $scope.structure = backendAPI.createStructureObject($scope.o, $scope.k1, $scope.k2, $scope.Layers)
+
+            await $scope.structure.buildStructure()
+
+            console.log($scope.structure)
+        };
         
         /** Updates the field using the Photonic Crystal. */
         function updateFields(){

@@ -14,23 +14,23 @@ EigenCalc.getEigenvaluesAndEigenvectors = function(a) {
     var eigenvalues = new Array();
     var eigenvectors = new Array();
 
-    console.time("eigTest")
+    //console.time("eigTest")
 
     var characteristicPol = characteristicPolynomial(a)
 
-    console.log( { A: a, characteristicPolynomial: characteristicPol })
+    //console.log( { A: a, characteristicPolynomial: characteristicPol })
 
     var roots = rootFinding(characteristicPol)
 
-    console.log( { A: a, eigvals: roots })
+    //console.log( { A: a, eigvals: roots })
 
     var eigVecs = findEigenvectors(a, roots)
 
-    console.log( { A: a, eigenvalues: roots, eigenvectors: eigVecs } )
+    //console.log( { A: a, eigenvalues: roots, eigenvectors: eigVecs } )
 
     var eigRes = organizePairOrdering(roots, eigVecs)
 
-    console.timeEnd("eigTest")
+    //console.timeEnd("eigTest")
 
     return eigRes
 }
@@ -46,7 +46,7 @@ function printVectorOfComplexNums(vec) {
 
     str += " ]";
 
-    console.log(str);
+    //console.log(str);
 }
 
 function isZeroBlock(matrix) {
