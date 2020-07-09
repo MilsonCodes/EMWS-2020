@@ -3,10 +3,11 @@
  * with the current javascript results.
  * @returns {true | false} returns true only if the results are the same
  * @param {Object} j javascript data
- * @param {String} url API url to post to
+ * @param {String} route API route to post to
  */
-function verify(j, url) {
+async function verify(j, route) {
     console.log('Verifying!')
+    const API_HOST = "https://emws.pythonanywhere.com/"
     // Base data set
     const data = {
         "omega": 0.398,
@@ -34,24 +35,27 @@ function verify(j, url) {
         ]
     }
     // Fetch python results
-    const pyResults = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        mode: 'no-cors'
-    }).then(console.log(pyResults))
-    const p = pyResults.constants // Grab constants from response
+    var p = await request(route, data, 'POST', 'application/json')
+    p = p.constants
+    j = j._data
     console.log({'python': p, 'jasvascript': j})
-    // Calculate difference
-    different = math.equal(p, j)
-    if (different) {
+    for (i = 0; i < j.length; i++){
+        // Calculate difference
+        different1 = math.equal(p[i].re, j[i].re)
+        different2 = math.equal(p[i].im, j[i].im)
+        console.log({'real': different1, 'imaginary': different2})
+        // p[i] = math.complex(p[i])
+        // j[i] = math.complex(j[i])
+        // if (isNumZero(different1) || isNumZero(different2)) {
         // Find scale of difference
-        ratio = math.divide(p, j)
-        console.log('The results are different, the Python code is off by a factor of: ' + ratio)
-        return false
-    }
-    else {
-        console.log('The results are the same.')
-        return true
+        ratio = math.divide(math.complex(p[i]), math.complex(j[i]))
+        console.log({'ratio': ratio})
+            // return false
+        // }
+        // else {
+        //     console.log('The results are the same.')
+        //     // return true
+        // }
     }
 }
 
@@ -565,7 +569,7 @@ emScattering3.Struct.prototype.calculateScattering = function() {
     this.scatteringMatrix = S;
 }
 
-emScattering3.Struct.prototype.calculateConstantVector = async function(incoming, scatteringMatrix) {
+emScattering3.Struct.prototype.calculateConstantVector = function(incoming, scatteringMatrix) {
     var L = this.numLayers, N = this.numLayers - 1, tildeS = math.zeros(4*N, 4*N), f = math.zeros(4*N);
 
     //Condense the scattering matrix
@@ -592,12 +596,12 @@ emScattering3.Struct.prototype.calculateConstantVector = async function(incoming
     for(var i = 0; i < 4*N; i++) {
         b.set([i+2], tildeB.get([i,0]));
     }
+    this.constants = b;
 
     //console.log({tildeS: tildeS, f: f, tildeB: tildeB, b: b});
 
-    const url = 'https://emws.pythonanywhere.com/structure/constants'
-    this.constants = b;
-    verify(this.constants, url)
+    const route = 'structure/constants'
+    verify(this.constants, route)
 }
 
 emScattering3.Struct.prototype.updateScattering = function() {

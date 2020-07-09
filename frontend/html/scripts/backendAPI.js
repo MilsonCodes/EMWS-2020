@@ -8,8 +8,8 @@ var backendAPI = backendAPI || {};
 
 const hostname = window && window.location && window.location.hostname;
 
-const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
-
+var API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
+API_HOST = "https://emws.pythonanywhere.com/"
 const request = async (route, body, request_type="POST", content_type="application/json") => {
   var numReqSent = 0, maxReqAttempt = 5, res = null
 
