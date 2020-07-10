@@ -1,3 +1,29 @@
+const data3 = {
+    "omega": 0.398,
+    "k1": 0.5,
+    "k2": 0.22,
+    "layers": [
+        {
+            "name": "Ambient Left",
+            "length": 10,
+            "epsilon": [[1.5, 0, 0], [0, 8, 0], [0, 0, 1]],
+            "mu": [[4, 0, 0], [0, 1, 0], [0, 0, 1]]
+        },
+        {
+            "name": "Layer 1",
+            "length": 7,
+            "epsilon": [[8, 0, 0], [0, 1.5, 0], [0, 0, 1]],
+            "mu": [[1, 0, 0], [0, 4, 0], [0, 0, 1]]
+        },
+        {
+            "name": "Ambient Right",
+            "length": 10,
+            "epsilon": [[1.5, 0, 0], [0, 8, 0], [0, 0, 1]],
+            "mu": [[4, 0, 0], [0, 1, 0], [0, 0, 1]]
+        }
+    ]
+}
+
 /**
  * Function to compare the python results from the api
  * with the current javascript results.
@@ -21,12 +47,6 @@ async function verify(j, route) {
                 "mu": [[4, 0, 0], [0, 1, 0], [0, 0, 1]]
             },
             {
-                "name": "Layer 1",
-                "length": 7,
-                "epsilon": [[8, 0, 0], [0, 1.5, 0], [0, 0, 1]],
-                "mu": [[1, 0, 0], [0, 4, 0], [0, 0, 1]]
-            },
-            {
                 "name": "Ambient Right",
                 "length": 10,
                 "epsilon": [[1.5, 0, 0], [0, 8, 0], [0, 0, 1]],
@@ -38,24 +58,22 @@ async function verify(j, route) {
     var p = await request(route, data, 'POST', 'application/json')
     p = p.constants
     j = j._data
-    console.log({'python': p, 'jasvascript': j})
+    const message = {'python': p, 'jasvascript': j}
+    console.log(message)
     for (i = 0; i < j.length; i++){
         // Calculate difference
         different1 = math.equal(p[i].re, j[i].re)
         different2 = math.equal(p[i].im, j[i].im)
-        console.log({'real': different1, 'imaginary': different2})
-        // p[i] = math.complex(p[i])
-        // j[i] = math.complex(j[i])
-        // if (isNumZero(different1) || isNumZero(different2)) {
-        // Find scale of difference
-        ratio = math.divide(math.complex(p[i]), math.complex(j[i]))
-        console.log({'ratio': ratio})
-            // return false
-        // }
-        // else {
-        //     console.log('The results are the same.')
-        //     // return true
-        // }
+        diff = {
+            'real': different1, 
+            'imaginary': different2
+        }
+        console.log(diff)
+        if (!diff.real || !diff.imaginary) {
+            // Find scale of difference
+            ratio = math.divide(math.complex(p[i]), math.complex(j[i]))
+            console.log({ratio})
+        }
     }
 }
 
