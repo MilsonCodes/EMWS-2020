@@ -339,6 +339,10 @@ angular.module('myApp', []).controller('EMWSCtrl', function($scope) {
             }
         }
         
+        $scope.adjustIncoming = () => {
+          $scope.structure.setIncoming($scope.incoming)
+        }
+        
         //#########################################################################################
         //#########################################################################################
         //#########################################################################################
@@ -390,17 +394,27 @@ angular.module('myApp', []).controller('EMWSCtrl', function($scope) {
             var k = [Number($scope.k1),Number($scope.k2),Number($scope.o)];
             $scope.crystal = emScattering3.Driver($scope.eArray,$scope.muArray,$scope.lArray,$scope.NumLayers,k,$scope.incoming);
 
-            $scope.structure = backendAPI.createStructureObject($scope.o, $scope.k1, $scope.k2, $scope.Layers)
+            console.time("Backend Time")
+            if(!$scope.structure)
+              $scope.structure = backendAPI.createStructureObject($scope.o, $scope.k1, $scope.k2, $scope.Layers)
+            else
+              $scope.structure.updateValues($scope.o, $scope.k1, $scope.k2, $scope.Layers)
 
             await $scope.structure.buildStructure()
+            await $scope.structure.getConstantVector()
+            console.timeEnd("Backend Time")
 
             console.log($scope.structure)
         };
         
         /** Updates the field using the Photonic Crystal. */
-        function updateFields(){
+        async function updateFields(){
             $scope.crystal.Struct.updateScattering();
             $scope.field = $scope.crystal.determineField();
+
+            console.time("Backend Time for Field")
+            await $scope.structure.determineField()
+            console.timeEnd("Backend Time for Field")
         }
         
         /** Updates the crystal, modes, and fields, and checks the check boxes on the Field tab. */
