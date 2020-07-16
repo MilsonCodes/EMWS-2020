@@ -263,4 +263,8 @@ class Structure {
     this.constants = res.constants
     this.field = res.field
   }
+
+  getField() {
+    return this.field ? this.field : null
+  }
 }
