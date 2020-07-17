@@ -59,6 +59,8 @@ const convertEigenvaluesToPythonParsable = eigVals => {
       newArr[i][j] = simplifyJSComplex(eigVals[i][j])
     }
   }
+
+  return newArr
 }
 
 const convertComplexMatrixToPythonParsableMatrix = matrix => {
@@ -81,6 +83,8 @@ const convertMatrixArrayToPythonParsable = matrixArr => {
   for(var i = 0; i < matrixArr.length; i++) {
     newArr[i] = convertComplexMatrixToPythonParsableMatrix(matrixArr[i])
   }
+
+  return newArr
 }
 
 const convertJSLayersToPythonLayers = layers => {
@@ -251,7 +255,11 @@ class Structure {
       }
     }
 
+    console.log(data)
+
     var res = await request("structure/field", data, "POST")
+
+    console.log(res)
 
     if(!this.eigenvalues && !this.eigenvectors && !this.maxwell_matrices) {
       this.eigenvalues = res.eigenvalues
