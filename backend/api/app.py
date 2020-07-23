@@ -1,18 +1,33 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask import request
 from flask import json
-import sys, os
-sys.path.append('..')
-from backend.scripts.scattering import Structure as s
 import numpy
+from flask_cors import CORS, cross_origin
+import sys, os
+sys.path.append('/home/EMWS/EMWS-2020/backend')
+from scripts.scattering import Structure as s
+
 
 # Run server by calling python app.py
 app = Flask(__name__)
+origins = ["http://localhost:8000", "https://www.math.lsu.edu/"]
+CORS(app, resources={r"/structure": {"origins": origins[0]}})
+
+base = '''
+Welcome to the EMWS API!
+\n\n
+Source code and documentation can be found here:
+\n\thttps://github.com/MilsonCodes/EMWS-2020
+\n\n
+The live site can be found here:
+\n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
+'''
 
 # Base route example
 @app.route('/')
+@cross_origin()
 def hello_world():
-    return 'Hello, World!'
+    return render_template('index.html')
 
 # Function to encode complex numbers into tuples to allow for json serialization
 def encode_complex(z):
@@ -27,6 +42,12 @@ def encode_vector(v):
         vec.append(encode_complex(v[n]))
     return vec
 
+def decode_vector(v):
+    vec = []
+    for n in range(len(v)):
+        vec.append(decode_complex(v[n]))
+    return vec
+
 # Encode 3d array
 def encode_matrix(m):
     size = m.size
@@ -35,16 +56,15 @@ def encode_matrix(m):
             for k in range(size[2]):
                 m[i][j][k] = encode_complex(m[i][j][k])
     return m
-                
+
 
 def decode_complex(val):
-    z
+    z = None
     try:
-        z.real = val.re
-        z.imag = val.im
+        z = complex(val['re'], val['im'])
         return z
     except:
-        z.real = val
+        z = val
         return z
 
 # Function to replace all elements of a 4x4 array with tuples
@@ -65,7 +85,7 @@ def decode_maxwell(m):
          [0, 0, 0, 0]]
     for i in range(4):
         for j in range(4):
-            n[i][j] = decode_complex(m.item(i,j))
+            n[i][j] = decode_complex(m[i][j])
     return n
 
 
@@ -78,7 +98,7 @@ def encode_eigen(m):
 
 def decode_eigen(m):
     n = [0, 0, 0, 0]
-    for i in range(len(m)):
+    for i in range(4):
         n[i] = decode_complex(m[i])
     return n
 
@@ -120,7 +140,7 @@ def encode_constants(m):
 
     for i in range(len(m)):
         n[i] = encode_complex(m[i])
-    
+
     return n
 
 def decode_constants(m):
@@ -128,11 +148,12 @@ def decode_constants(m):
 
     for i in range(len(m)):
         n[i] = decode_complex(m[i])
-    
+
     return n
 
 # Route for creating a crystal structure and calculating eigen problem
 @app.route('/structure/modes', methods=['POST'])
+@cross_origin()
 def modes():
     assert request.method == 'POST'
     # Parse data
@@ -147,32 +168,38 @@ def modes():
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
     struct.buildMatrices()
     struct.calcEig()
+    struct.calcModes()
     maxwells = []
     e_vals = []
     e_vecs = []
+    modes = []
     i = 0
     for layer in struct.layers:
         print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal.tolist())
         o = encode_evecs(layer.eigVec.tolist())
+        mm = encode_evecs(layer.modes.tolist())
 
 
         maxwells.append(m)
         e_vals.append(n)
         e_vecs.append(o)
+        modes.append(mm)
         i += 1
 
     data = {
         'maxwell_matrices': maxwells,
         'eigenvalues': e_vals,
-        'eigenvectors': e_vecs
+        'eigenvectors': e_vecs,
+        'modes': modes
     }
 
     return json.jsonify(data)
 
 # Route for getting data points
 @app.route('/structure/field', methods=['POST'])
+@cross_origin()
 def field():
     assert request.method == 'POST'
     req = json.loads(request.data)
@@ -184,7 +211,7 @@ def field():
     struct = s(num, omega, k1, k2)
     for layer in layers:
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
-    
+
     # Setup return data
     data = {}
 
@@ -199,7 +226,7 @@ def field():
         eigenvectors = req['eigenvectors']
     except Exception:
         print('\nFailed to maxwell or eigendata. Will calculate data')
-    
+
     # Handle maxwells
     if maxwell_matrices == None:
         struct.buildMatrices()
@@ -264,8 +291,10 @@ def field():
 
     return json.jsonify(data)
 
-
+# Route to update structure if one exists, else it will create one
+# Returns constants, maxwells, eigenvectors and values, and scattering matrix
 @app.route('/structure/constants', methods=['POST'])
+@cross_origin()
 def constants():
     assert request.method == 'POST'
     # Parse data
@@ -275,7 +304,7 @@ def constants():
     k2 = req['k2']
     layers = req['layers']
     try:
-        c = req['incoming']
+        c = decode_eigen(req['incoming'])
     except:
         print('No incoming coeffecients found, using defaults.')
         c = [1, 0, 0, 0]
@@ -285,7 +314,7 @@ def constants():
     e_vecs = []
     num = len(layers)
     struct = s(num, omega, k1, k2)
-    try:    
+    try:
         maxwells = decode_maxwell(req['maxwell'])
         maxwell = True
     except:
@@ -302,7 +331,7 @@ def constants():
     if (maxwell == False):
         struct.buildMatrices()
     else:
-        struct.maxwell = maxwells[n]
+        struct.maxwell = maxwells
     if (eigen == False):
         struct.calcEig()
     else:
@@ -339,7 +368,9 @@ def constants():
         'constants': constants
     }
 
-    return json.jsonify(data)
+    response = json.jsonify(data)
+
+    return response
 
 if __name__ == '__main__':
     app.run()
