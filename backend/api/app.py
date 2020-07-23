@@ -42,6 +42,12 @@ def encode_vector(v):
         vec.append(encode_complex(v[n]))
     return vec
 
+def decode_vector(v):
+    vec = []
+    for n in range(len(v)):
+        vec.append(decode_complex(v[n]))
+    return vec
+
 # Encode 3d array
 def encode_matrix(m):
     size = m.size
@@ -53,13 +59,12 @@ def encode_matrix(m):
 
 
 def decode_complex(val):
-    z
+    z = None
     try:
-        z.real = val.re
-        z.imag = val.im
+        z = complex(val['re'], val['im'])
         return z
     except:
-        z.real = val
+        z = val
         return z
 
 # Function to replace all elements of a 4x4 array with tuples
@@ -80,7 +85,7 @@ def decode_maxwell(m):
          [0, 0, 0, 0]]
     for i in range(4):
         for j in range(4):
-            n[i][j] = decode_complex(m.item(i,j))
+            n[i][j] = decode_complex(m[i][j])
     return n
 
 
@@ -93,7 +98,7 @@ def encode_eigen(m):
 
 def decode_eigen(m):
     n = [0, 0, 0, 0]
-    for i in range(len(m)):
+    for i in range(4):
         n[i] = decode_complex(m[i])
     return n
 
@@ -163,26 +168,31 @@ def modes():
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
     struct.buildMatrices()
     struct.calcEig()
+    struct.calcModes()
     maxwells = []
     e_vals = []
     e_vecs = []
+    modes = []
     i = 0
     for layer in struct.layers:
         print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal.tolist())
         o = encode_evecs(layer.eigVec.tolist())
+        mm = encode_evecs(layer.modes.tolist())
 
 
         maxwells.append(m)
         e_vals.append(n)
         e_vecs.append(o)
+        modes.append(mm)
         i += 1
 
     data = {
         'maxwell_matrices': maxwells,
         'eigenvalues': e_vals,
-        'eigenvectors': e_vecs
+        'eigenvectors': e_vecs,
+        'modes': modes
     }
 
     return json.jsonify(data)
@@ -297,7 +307,7 @@ def constants():
         c = decode_eigen(req['incoming'])
     except:
         print('No incoming coeffecients found, using defaults.')
-        c = decode_eigen([1, 0, 0, 0])
+        c = [1, 0, 0, 0]
     maxwell = False
     eigen = False
     e_vals = []
