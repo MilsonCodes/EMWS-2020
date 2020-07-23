@@ -1,2 +1,4 @@
 frontend/starthtml.bat
 .vscode
+
+!**/__pycache__/
