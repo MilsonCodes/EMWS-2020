@@ -50,7 +50,7 @@ const simplifyJSComplex = val => {
 const convertEigenvaluesToPythonParsable = eigVals => {
   var newArr = new Array(eigVals.length)
 
-  console.log(newArr)
+  //console.log(newArr)
 
   for(var i = 0; i < eigVals.length; i++) {
     newArr[i] = new Array(eigVals[i].length)
@@ -90,7 +90,7 @@ const convertMatrixArrayToPythonParsable = matrixArr => {
 const convertJSLayersToPythonLayers = layers => {
   var newLayers = []
 
-  console.log(layers)
+  //console.log(layers)
 
   for(var i = 0; i < layers.length; i++) {
     var curLayer = layers[i]
@@ -273,7 +273,7 @@ class Structure {
       res = await request("structure/field", data, "POST")
     } catch(e) {
       console.error(e)
-      console.log("Failed to get modes!")
+      console.log("Failed to get field!")
       return
     }
 
