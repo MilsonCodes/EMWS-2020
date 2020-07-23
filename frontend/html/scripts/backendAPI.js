@@ -162,9 +162,15 @@ class Structure {
       k1: this.k1,
       k2: this.k2,
       layers: convertJSLayersToPythonLayers(this.layers)
-    }
+    }, res
 
-    var res = await request("structure/modes", data, "POST");
+    try {
+      res = await request("structure/modes", data, "POST");
+    } catch(e) {
+      console.error(e)
+      console.log("Failed to get modes!")
+      return
+    }
 
     this.maxwell_matrices = res.maxwell_matrices
     this.eigenvalues = res.eigenvalues
@@ -190,7 +196,7 @@ class Structure {
       k2: this.k2,
       layers: convertJSLayersToPythonLayers(this.layers),
       incoming: this.incoming
-    }
+    }, res
 
     if(this.eigenvalues && this.eigenvectors && this.maxwell_matrices) {
       data = {
@@ -201,7 +207,13 @@ class Structure {
       }
     }
 
-    var res = await request("structure/constants", data, "POST")
+    try {
+      res = await request("structure/constants", data, "POST")
+    } catch(e) {
+      console.error(e)
+      console.log("Failed to get constants!")
+      return
+    }
 
     if(!this.eigenvalues && !this.eigenvectors && !this.maxwell_matrices) {
       this.eigenvalues = res.eigenvalues
@@ -244,7 +256,7 @@ class Structure {
       k2: this.k2,
       layers: convertJSLayersToPythonLayers(this.layers),
       incoming: this.incoming
-    }
+    }, res
 
     if(this.eigenvalues && this.eigenvectors && this.maxwell_matrices) {
       data = {
@@ -257,9 +269,13 @@ class Structure {
 
     console.log(data)
 
-    var res = await request("structure/field", data, "POST")
-
-    console.log(res)
+    try {
+      res = await request("structure/field", data, "POST")
+    } catch(e) {
+      console.error(e)
+      console.log("Failed to get modes!")
+      return
+    }
 
     if(!this.eigenvalues && !this.eigenvectors && !this.maxwell_matrices) {
       this.eigenvalues = res.eigenvalues
