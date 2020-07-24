@@ -5,8 +5,9 @@
  * @param {Object} j javascript data
  * @param {String} url API url to post to
  */
-function verify(j, url) {
+async function verify(j, url) {
     console.log('Verifying!')
+
     // Base data set
     const data = {
         "omega": 0.398,
@@ -33,12 +34,14 @@ function verify(j, url) {
             }
         ]
     }
+
     // Fetch python results
-    const pyResults = await fetch(url, {
+    var pyResults = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
         mode: 'no-cors'
-    }).then(console.log(pyResults))
+    })
+
     const p = pyResults.constants // Grab constants from response
     console.log({'python': p, 'jasvascript': j})
     // Calculate difference

@@ -118,6 +118,14 @@ const parseStringVal = str => {
   return val
 }
 
+const orderEigenvalues = (eVals, orderLeft, orderRight) => {
+  return eVals
+}
+
+const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
+  return eVecs
+}
+
 //const convert
 
 backendAPI.createStructureObject = (omega, k1, k2, layers) => {
@@ -131,6 +139,8 @@ class Structure {
     this.k2 = k2
     this.layers = layers
     this.incoming = [1,0,0,0]
+    this.eigenOrderLeft = [0,1,2,3]
+    this.eigenOrderRight = [0,1,2,3] 
   }
 
   updateValues(omega, k1, k2, layers) {
@@ -171,6 +181,8 @@ class Structure {
       console.log("Failed to get modes!")
       return
     }
+
+    console.log(res.maxwell_matrices)
 
     this.maxwell_matrices = res.maxwell_matrices
     this.eigenvalues = res.eigenvalues
@@ -262,8 +274,8 @@ class Structure {
       data = {
         ...data,
         maxwell_matrices: convertMatrixArrayToPythonParsable(this.maxwell_matrices),
-        eigenvalues: convertEigenvaluesToPythonParsable(this.eigenvalues),
-        eigenvectors: convertMatrixArrayToPythonParsable(this.eigenvectors)
+        eigenvalues: orderEigenvalues(convertEigenvaluesToPythonParsable(this.eigenvalues), this.eigenOrderLeft, this.eigenOrderRight),
+        eigenvectors: orderEigenvectors(convertMatrixArrayToPythonParsable(this.eigenvectors), this.eigenOrderLeft, this.eigenOrderRight)
       }
     }
 
@@ -278,6 +290,8 @@ class Structure {
     }
 
     if(!this.eigenvalues && !this.eigenvectors && !this.maxwell_matrices) {
+      console.log(res.maxwell_matrices)
+
       this.eigenvalues = res.eigenvalues
       this.eigenvectors = res.eigenvectors
       this.maxwell_matrices = res.maxwell_matrices
