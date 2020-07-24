@@ -67,7 +67,7 @@ class Structure:
     class Layer:
         # Instance variables for each Layer object
         def __init__(self, name, length, epsilon, mu):
-            print('     Instanciating Layer')
+            #print('     Instanciating Layer')
             self.name = name
             self.length = length
             self.epsilon = epsilon
@@ -82,7 +82,7 @@ class Structure:
 
     # Instance variables for each Structure object
     def __init__(self, num, omega, k1, k2):
-        print('Instanciating Structure')
+        #print('Instanciating Structure')
         self.num = num
         self.omega = omega
         self.c = 1
@@ -98,24 +98,24 @@ class Structure:
             print(layer)
 
     def removeLayer(self, n):
-        print('Removing Layer')
+        #print('Removing Layer')
         self.layers.pop(n)
 
     # Method for adding a layer to the structure
     def addLayer(self, name, length, epsilon, mu):
-        print('Adding Layer')
+        #print('Adding Layer')
         l = self.Layer(name, length, epsilon, mu)
         self.layers.append(l)
 
     # Method for inserting a layer into given index n
     def insertLayer(self, name, length, epsilon, mu, n):
-        print('Inserting Layer')
+        #print('Inserting Layer')
         l = self.Layer(name, length, epsilon, mu)
         self.layers.insert(n, l)
 
     # Create the maxwell matrices
     def buildMatrices(self):
-        print('\nBuilding Maxwell')
+        #print('\nBuilding Maxwell')
         maxwell_matrices = []
         for layer in self.layers:
             e = layer.epsilon
@@ -158,41 +158,41 @@ class Structure:
 
     # Import maxwell matrices into struct
     def importMatrices(self, matrices):
-        print('\nImporting Maxwell from Data')
+        #print('\nImporting Maxwell from Data')
         self.maxwell = matrices
 
     # Calculate the eigenproblem for all layers of the structure
     def calcEig(self):
-        print('\nCalculating Eigen Problem')
+        #print('\nCalculating Eigen Problem')
         for n in range(len(self.layers)):
-            print('For layer ' + str(n+1))
-            start = time.perf_counter()
+            #print('For layer ' + str(n+1))
+            #start = time.perf_counter()
             eigVal, eigVec = np.linalg.eig(self.maxwell[n])
             eigVal, eigVec = organizeEigen(eigVal, eigVec)
             #eigVal, eigVec = organizeEigen(eigVal, eigVec)
-            end = time.perf_counter()
-            print(f'Time to calculate Eigensystem: {end-start:0.5f} seconds')
+            #end = time.perf_counter()
+            #print(f'Time to calculate Eigensystem: {end-start:0.5f} seconds')
             self.layers[n].eigVal = eigVal
             self.layers[n].eigVec = np.transpose(eigVec)
-            print(f'Values:\n{self.layers[n].eigVal}')
-            print(f'Vectors:\n{self.layers[n].eigVec}')
+            #print(f'Values:\n{self.layers[n].eigVal}')
+            #print(f'Vectors:\n{self.layers[n].eigVec}')
 
     # Import preexisting eigendata
     def importEig(self, e_vals, e_vecs):
-        print('\nImporting previously created eigendata')
+        #print('\nImporting previously created eigendata')
         for n in range(len(self.layers)):
             self.layers[n].eigVal = e_vals[n]
             self.layers[n].eigVec = e_vecs[n]
 
     # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
-        print('\nCalculating Modes')
+        #print('\nCalculating Modes')
         for layer in self.layers:
             mode = np.zeros((1,4), dtype=complex)
             for n in range(4):
-                mode += np.real(layer.eigVec[n]) * math.exp(np.real(layer.eigVal[n]) * layer.length)
+                mode += np.multiply(np.multiply(np.real(layer.eigVec[n]), np.exp(np.real(layer.eigVal[n]))), layer.length)
             layer.modes = mode
-            print(str(layer.name) + ' Modes:\nc*' + str(layer.modes))
+            #print(str(layer.name) + ' Modes:\nc*' + str(layer.modes))
 
     def printMaxwell(self):
         print('Maxwells:')
@@ -326,8 +326,8 @@ class Structure:
 
             current_c = self.constants[layer*4:4+(layer*4)]
 
-            print("Constant vector at layer " + str(layer))
-            print(current_c)
+            #print("Constant vector at layer " + str(layer))
+            #print(current_c)
 
             for i in range(num_points):
                 z = z_ends[layer] + (i * length) / num_points
@@ -340,9 +340,9 @@ class Structure:
                 expMat = np.matmul(scalarMat, expDiag)
                 fieldVec = np.matmul(expMat, current_c)
 
-                if i == 0:
-                    print("Field vec at " + str(z))
-                    print(fieldVec)
+                #if i == 0:
+                #    print("Field vec at " + str(z))
+                #    print(fieldVec)
 
                 z_arr.append(z)
                 Ex.append(fieldVec.item(0, 0).real)

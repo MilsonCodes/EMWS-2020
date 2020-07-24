@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from flask import request
 from flask import json
-import numpy
+import numpy as np
 from flask_cors import CORS, cross_origin
-import sys, os
+import sys
 sys.path.append('/home/EMWS/EMWS-2020/backend')
 from scripts.scattering import Structure as s
 
@@ -46,7 +46,7 @@ def decode_vector(v):
     vec = []
     for n in range(len(v)):
         vec.append(decode_complex(v[n]))
-    return vec
+    return np.asarray(vec, dtype=complex)
 
 # Encode 3d array
 def encode_matrix(m):
@@ -69,20 +69,20 @@ def decode_complex(val):
 
 # Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
-    n = [[0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]]
-    for i in range(4):
-        for j in range(4):
-            n[i][j] = encode_complex(m.item(i,j))
-    return n
+    ret = []
+    for k in range(len(m)):
+        n = [[0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]]
+        for i in range(4):
+            for j in range(4):
+                n[i][j] = encode_complex(m.item(i,j))
+        ret.append(n)
+    return ret
 
 def decode_maxwell(m):
-    n = [[0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]]
+    n = np.zeros((4,4), dtype=complex)
     for i in range(4):
         for j in range(4):
             n[i][j] = decode_complex(m[i][j])
@@ -100,7 +100,7 @@ def decode_eigen(m):
     n = [0, 0, 0, 0]
     for i in range(4):
         n[i] = decode_complex(m[i])
-    return n
+    return np.asarray(n, dtype=complex)
 
 # Function to replace all elements of each 4 item vector
 def encode_evecs(m):
@@ -110,10 +110,10 @@ def encode_evecs(m):
     return n
 
 def decode_evecs(m):
-    n = [0, 0, 0, 0]
+    n = []
     for i in range(len(m)):
-        n[i] = decode_eigen(m[i])
-    return n
+        n.append(decode_eigen(m[i]))
+    return np.asarray(n, dtype=complex)
 
 # Function set to encode/decode a scattering matrix
 def encode_scattering(m):
@@ -144,7 +144,7 @@ def encode_constants(m):
     return n
 
 def decode_constants(m):
-    n = [0] * len(m)
+    n = np.zeros(len(m), dtype=complex)
 
     for i in range(len(m)):
         n[i] = decode_complex(m[i])
@@ -175,7 +175,7 @@ def modes():
     modes = []
     i = 0
     for layer in struct.layers:
-        print(layer.eigVec)
+        #print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal.tolist())
         o = encode_evecs(layer.eigVec.tolist())
@@ -222,10 +222,14 @@ def field():
 
     try:
         maxwell_matrices = req['maxwell_matrices']
+    except Exception:
+        print('\nFailed to load maxwell. Will calculate data')
+    try:
         eigenvalues = req['eigenvalues']
         eigenvectors = req['eigenvectors']
     except Exception:
-        print('\nFailed to maxwell or eigendata. Will calculate data')
+        print('\nFailed to load eigen system. Will calculate data')
+
 
     # Handle maxwells
     if maxwell_matrices == None:
@@ -341,7 +345,7 @@ def constants():
     e_vecs = []
     i = 0
     for layer in struct.layers:
-        print(layer.eigVec)
+        #print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal)
         o = encode_evecs(layer.eigVec.tolist())
