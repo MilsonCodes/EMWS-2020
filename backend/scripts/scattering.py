@@ -340,9 +340,9 @@ class Structure:
                 expMat = np.matmul(scalarMat, expDiag)
                 fieldVec = np.matmul(expMat, current_c)
 
-                #if i == 0:
-                #    print("Field vec at " + str(z))
-                #    print(fieldVec)
+                # if i == 0:
+                    # print("Field vec at " + str(z))
+                    # print(fieldVec)
 
                 z_arr.append(z)
                 Ex.append(fieldVec.item(0, 0).real)

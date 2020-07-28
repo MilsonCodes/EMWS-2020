@@ -69,17 +69,14 @@ def decode_complex(val):
 
 # Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
-    ret = []
-    for k in range(len(m)):
-        n = [[0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0]]
-        for i in range(4):
-            for j in range(4):
-                n[i][j] = encode_complex(m.item(i,j))
-        ret.append(n)
-    return ret
+    n = [[0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]]
+    for i in range(4):
+        for j in range(4):
+            n[i][j] = encode_complex(m.item(i,j))
+    return n
 
 def decode_maxwell(m):
     n = np.zeros((4,4), dtype=complex)
@@ -97,10 +94,10 @@ def encode_eigen(m):
     return n
 
 def decode_eigen(m):
-    n = [0, 0, 0, 0]
+    n = np.zeros(4, dtype=complex)
     for i in range(4):
         n[i] = decode_complex(m[i])
-    return np.asarray(n, dtype=complex)
+    return n
 
 # Function to replace all elements of each 4 item vector
 def encode_evecs(m):
@@ -110,10 +107,11 @@ def encode_evecs(m):
     return n
 
 def decode_evecs(m):
-    n = []
-    for i in range(len(m)):
-        n.append(decode_eigen(m[i]))
-    return np.asarray(n, dtype=complex)
+    n = np.zeros((4,4), dtype=complex)
+    for i in range(4):
+        for j in range(4):
+            n[i][j] = decode_complex(m[i][j])
+    return n
 
 # Function set to encode/decode a scattering matrix
 def encode_scattering(m):
@@ -290,7 +288,34 @@ def field():
     except Exception:
         num_points = 200
 
-    field = struct.determineField(num_points)
+    try:
+        field = struct.determineField(num_points)
+    except Exception:
+        struct.buildMatrices()
+        maxwells = []
+        for maxwell in struct.maxwell:
+            m = encode_maxwell(maxwell)
+            maxwells.append(m)
+        data['maxwell_matrices'] = maxwells
+        struct.calcEig()
+        struct.calcModes()
+        e_vals = []
+        e_vecs = []
+        i = 0
+        for layer in struct.layers:
+            n = encode_eigen(layer.eigVal.tolist())
+            o = encode_evecs(layer.eigVec.tolist())
+
+            e_vals.append(n)
+            e_vecs.append(o)
+            i += 1
+        data['eigenvalues'] = e_vals
+        data['eigenvectors'] = e_vecs
+        struct.calcScattering()
+        struct.calcConstants(incoming[0], incoming[1], incoming[2], incoming[3])
+        data['scattering'] = encode_scattering(struct.scattering)
+        data['constants'] = encode_constants(struct.constants)
+        field = struct.determineField(num_points)
     data['field'] = field
 
     return json.jsonify(data)
