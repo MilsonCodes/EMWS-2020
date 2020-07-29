@@ -1,7 +1,7 @@
-import math
 import time
 import numpy as np
-from scipy.linalg import null_space, solve, lstsq
+# from scipy.linalg import null_space, lstsq
+from scipy.linalg import solve
 from numpy.linalg import inv
 
 # Set precision for printing arrays
@@ -326,8 +326,8 @@ class Structure:
 
             current_c = self.constants[layer*4:4+(layer*4)]
 
-            #print("Constant vector at layer " + str(layer))
-            #print(current_c)
+            # print("Constant vector at layer " + str(layer))
+            # print(current_c)
 
             for i in range(num_points):
                 z = z_ends[layer] + (i * length) / num_points

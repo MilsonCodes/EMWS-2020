@@ -10,9 +10,12 @@ from scripts.scattering import Structure as s
 
 # Run server by calling python app.py
 app = Flask(__name__)
+# List of accepted origins
 origins = ["http://localhost:8000", "https://www.math.lsu.edu/"]
-CORS(app, resources={r"/structure": {"origins": origins[0]}})
+# Change origins to '*' if this method gives issues
+CORS(app, resources={r"/structure": {"origins": origins}})
 
+# Greeting message, currently unused
 base = '''
 Welcome to the EMWS API!
 \n\n
@@ -36,6 +39,16 @@ def encode_complex(z):
     except:
         return z
 
+def decode_complex(val):
+    z = None
+    try:
+        z = complex(val['re'], val['im'])
+        return z
+    except:
+        z = val
+        return z
+
+# Functions for encoding/decoding arbitrary length vectors
 def encode_vector(v):
     vec = []
     for n in range(len(v)):
@@ -56,16 +69,6 @@ def encode_matrix(m):
             for k in range(size[2]):
                 m[i][j][k] = encode_complex(m[i][j][k])
     return m
-
-
-def decode_complex(val):
-    z = None
-    try:
-        z = complex(val['re'], val['im'])
-        return z
-    except:
-        z = val
-        return z
 
 # Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
@@ -161,12 +164,17 @@ def modes():
     k2 = req['k2']
     layers = req['layers']
     num = len(layers)
+
+    # Create structure
     struct = s(num, omega, k1, k2)
     for layer in layers:
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
+    # Calculate and build structure
     struct.buildMatrices()
     struct.calcEig()
     struct.calcModes()
+
+    # Create list of values for response
     maxwells = []
     e_vals = []
     e_vecs = []
@@ -186,6 +194,7 @@ def modes():
         modes.append(mm)
         i += 1
 
+    # Prepare response data
     data = {
         'maxwell_matrices': maxwells,
         'eigenvalues': e_vals,
@@ -221,12 +230,14 @@ def field():
     try:
         maxwell_matrices = req['maxwell_matrices']
     except Exception:
-        print('\nFailed to load maxwell. Will calculate data')
+        pass
+        #print('\nFailed to load maxwell. Will calculate data')
     try:
         eigenvalues = req['eigenvalues']
         eigenvectors = req['eigenvectors']
     except Exception:
-        print('\nFailed to load eigen system. Will calculate data')
+        pass
+        #print('\nFailed to load eigen system. Will calculate data')
 
 
     # Handle maxwells
@@ -288,6 +299,8 @@ def field():
     except Exception:
         num_points = 200
 
+    # This needs to be optimized, either calcuate all from the beginning or
+    #   fix the import/decode eigen functions.
     try:
         field = struct.determineField(num_points)
     except Exception:
@@ -348,7 +361,7 @@ def constants():
         maxwell = True
     except:
         maxwells = []
-        print('No maxwell matrix included')
+        #print('No maxwell matrix included')
     for layer in layers:
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
         try:
@@ -356,7 +369,8 @@ def constants():
             e_vecs.append(decode_evecs(layer['eig_vectors']))
             eigen = True
         except:
-            print('No eigen data included')
+            pass
+            #print('No eigen data included')
     if (maxwell == False):
         struct.buildMatrices()
     else:
