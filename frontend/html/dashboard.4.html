@@ -533,23 +533,23 @@
                             <!--<p> {{mBack1}} </p>
                             <p> {{mBack2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[0]}}
-                                    <input type="checkbox" id="backModeChk1">
+                                <label class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" ng-model="checkB1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, true, true, checkB1)" id="backModeChk1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[1]}}
-                                    <input type="checkbox" id="backModeChk2">
+                                <label class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" ng-model="checkB2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, true, true, checkB2)" id="backModeChk2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[2]}}
-                                    <input type="checkbox" id="backModeChk3">
+                                <label class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" ng-model="checkB3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, true, true, checkB3)" id="backModeChk3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[3]}}
-                                    <input type="checkbox" id="backModeChk4">
+                                <label class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" ng-model="checkB4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, true, true, checkB4)" id="backModeChk4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -561,23 +561,23 @@
                             <!--<p> {{mFor1}} </p>
                             <p> {{mFor2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[0]}}
-                                    <input type="checkbox" id="forModeChk1">
+                                <label class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" ng-model="checkF1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, false, true, checkF1)" id="forModeChk1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[1]}}
-                                    <input type="checkbox" id="forModeChk2">
+                                <label class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" ng-model="checkF2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, false, true, checkF2)" id="forModeChk2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[2]}}
-                                    <input type="checkbox" id="forModeChk3">
+                                <label class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" ng-model="checkF3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, false, true, checkF3)" id="forModeChk3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[3]}}
-                                    <input type="checkbox" id="forModeChk4">
+                                <label class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" ng-model="checkF4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, false, true, checkF4)" id="forModeChk4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -602,11 +602,11 @@
                                 <div class="col-lg-9">
                                     <div class="row row-sm">
                                         <div class="col-lg-5">
-                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[0]" id="j1" style="width: 50%; float: left;">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[0]" ng-change="adjustIncoming()" id="j1" style="width: 50%; float: left;">
                                             <label style="margin-top: 5px;" id="incoming0">Test</label>
                                         </div>
                                         <div class="col-lg-5">
-                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[1]" id="j2" style="width: 50%; float: left;">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[1]" ng-change="adjustIncoming()" id="j2" style="width: 50%; float: left;">
                                             <label style="margin-top: 5px;" id="incoming1">Test</label>
                                         </div>
                                     </div>
@@ -617,11 +617,11 @@
                                 <div class="col-lg-9">
                                     <div class="row row-sm">
                                         <div class="col-lg-5">
-                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[2]" id="j3" style="width: 50%; float: left;">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[2]" ng-change="adjustIncoming()" id="j3" style="width: 50%; float: left;">
                                             <label style="margin-top: 5px;" id="incoming2">Test</label>
                                         </div>
                                         <div class="col-lg-5">
-                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[3]" id="j4" style="width: 50%; float: left;">
+                                            <input type="text" class="form-control form-control-sm" ng-model="incoming[3]" ng-change="adjustIncoming()" id="j4" style="width: 50%; float: left;">
                                             <label style="margin-top: 5px;" id="incoming3">Test</label>
                                         </div>
                                     </div>
@@ -789,23 +789,23 @@
                             <!--<p> {{mBack1}} </p>
                             <p> {{mBack2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[0]}}
-                                    <input type="checkbox" id="backModeChkT1">
+                                <label class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" ng-model="checkTB1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, true, false, checkTB1)" id="backModeChkT1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[1]}}
-                                    <input type="checkbox" id="backModeChkT2">
+                                <label class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" ng-model="checkTB2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, true, false, checkTB2)" id="backModeChkT2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[2]}}
-                                    <input type="checkbox" id="backModeChkT3">
+                                <label class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" ng-model="checkTB3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, true, false, checkTB3)" id="backModeChkT3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[3]}}
-                                    <input type="checkbox" id="backModeChkT4">
+                                <label class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" ng-model="checkTB4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, true, false, checkTB4)" id="backModeChkT4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -817,23 +817,23 @@
                             <!--<p> {{mFor1}} </p>
                             <p> {{mFor2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[0]}}
-                                    <input type="checkbox" id="forModeChkT1">
+                                <label class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" ng-model="checkTF1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, false, false, checkTF1)" id="forModeChkT1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[1]}}
-                                    <input type="checkbox" id="forModeChkT2">
+                                <label class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" ng-model="checkTF2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, false, false, checkTF2)" id="forModeChkT2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[2]}}
-                                    <input type="checkbox" id="forModeChkT3">
+                                <label class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" ng-model="checkTF3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, false, false, checkTF3)" id="forModeChkT3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[3]}}
-                                    <input type="checkbox" id="forModeChkT4">
+                                <label class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" ng-model="checkTF4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, false, false, checkTF4)" id="forModeChkT4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -966,6 +966,7 @@
   <script src="scripts/numeric-1.2.6.js"></script>
   <script src="scripts/mathbox-bundle.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="scripts/backendAPI.js"></script>
   <script src="scripts/EMWSCtrl.js"></script>
   
   <script>console.log("this ran5");</script>

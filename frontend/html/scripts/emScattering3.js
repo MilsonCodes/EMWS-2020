@@ -5,8 +5,9 @@
  * @param {Object} j javascript data
  * @param {String} url API url to post to
  */
-function verify(j, url) {
+async function verify(j, url) {
     console.log('Verifying!')
+
     // Base data set
     const data = {
         "omega": 0.398,
@@ -33,12 +34,14 @@ function verify(j, url) {
             }
         ]
     }
+
     // Fetch python results
-    const pyResults = await fetch(url, {
+    var pyResults = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
         mode: 'no-cors'
-    }).then(console.log(pyResults))
+    })
+
     const p = pyResults.constants // Grab constants from response
     console.log({'python': p, 'jasvascript': j})
     // Calculate difference
@@ -349,16 +352,16 @@ emScattering3.Struct.prototype.calcEigs = function(){
         //ret_values[i] = emScattering3.calcEigsVa(maxwell, complex_eigenvalues);
         //ret_vectors[i] = emScattering3.calcEigsVe(maxwell, complex_eigenvectors);
 
-        console.time(`Eigencalc Time for ODE #${i}`);
+        //console.time(`Eigencalc Time for ODE #${i}`);
 
         var eigenResultsOld = { values: emScattering3.calcEigsVa(maxwell, complex_eigenvalues), vectors: math.transpose(emScattering3.calcEigsVe(maxwell, complex_eigenvectors)) };
-        console.log({maxwell, eigenvalues: eigenResultsOld.values, eigenvectors: eigenResultsOld.vectors});
-        console.log({vectorDiv: math.divide(eigenResultsOld.vectors._data[0], eigenResultsOld.vectors.get([0,0])) })
-        console.timeEnd(`Eigencalc Time for ODE #${i}`);
+        //console.log({maxwell, eigenvalues: eigenResultsOld.values, eigenvectors: eigenResultsOld.vectors});
+        //console.log({vectorDiv: math.divide(eigenResultsOld.vectors._data[0], eigenResultsOld.vectors.get([0,0])) })
+        //console.timeEnd(`Eigencalc Time for ODE #${i}`);
 
         var eigResults = EigenCalc.getEigenvaluesAndEigenvectors(maxwell), omega = this.omega;
 
-        console.log({omega, maxwell, eigResults});
+        //console.log({omega, maxwell, eigResults});
 
         ret_values[i] = eigResults.eigenvalues;
         ret_vectors[i] = eigResults.eigenvectors;
@@ -537,19 +540,19 @@ emScattering3.Struct.prototype.calculateScattering = function() {
         else interfaces[z] = ifaces[z] - ifaces[z-1];
     }
 
-    console.log(interfaces);
+    //console.log(interfaces);
     
     for(var l = 0; l < N; l++) {
         var expVecLeft = math.exp(math.multiply(this.eigenvalues[l],math.subtract(interfaces[l+1],interfaces[l])));
         var expVecRight = math.exp(math.multiply(this.eigenvalues[l+1],math.subtract(interfaces[l+1],interfaces[l+1])));
 
-        console.log({leftExpVec: expVecLeft, rightExpVec: expVecRight});
+        //console.log({leftExpVec: expVecLeft, rightExpVec: expVecRight});
 
         leftPsi[l] = math.multiply(math.transpose(this.eigenvectors[l]),math.diag(expVecLeft));
         rightPsi[l] = math.multiply(math.transpose(this.eigenvectors[l+1]),math.diag(expVecRight));
     }
 
-    console.log({LeftPsi: leftPsi, RightPsi: rightPsi});
+    //console.log({LeftPsi: leftPsi, RightPsi: rightPsi});
 
     for(var l = 0; l < N; l++) {
         for(var i = 0; i < 4; i++) {
@@ -593,7 +596,7 @@ emScattering3.Struct.prototype.calculateConstantVector = async function(incoming
         b.set([i+2], tildeB.get([i,0]));
     }
 
-    console.log({tildeS: tildeS, f: f, tildeB: tildeB, b: b});
+    //console.log({tildeS: tildeS, f: f, tildeB: tildeB, b: b});
 
     const url = 'https://emws.pythonanywhere.com/structure/constants'
     this.constants = b;
@@ -653,12 +656,12 @@ emScattering3.PhotonicCrystal.prototype.determineField2 = function() {
     //c = emScattering3.calculateConstants(this.Struct.scatteringMatrix,this.Struct.Modes,this.Struct.transferMatrices[0]);           //Creates a constant vector using the scattering matrix, coefficients, and transfer matrix
     c = this.Struct.constants;
 
-    console.log(c);
+    //console.log(c);
 
     for(var i = 0; i < numLayers; i++){
         current_c = c._data.slice(i*4,4+(i*4));
 
-        console.log(current_c);
+        //console.log(current_c);
 
         if(i === 0){
             layerNormZ = numeric.linspace(this.Struct.layers[i].length,0, 
@@ -765,7 +768,7 @@ emScattering3.PhotonicCrystal.prototype.determineField = function() {
         else interfaces[z] = zEnds[z] - zEnds[z-1];
     }
 
-    console.log({ zz: interfaces, zzz: zEnds });
+    //console.log({ zz: interfaces, zzz: zEnds });
 
     for(var layer = 0; layer < numLayers; layer++){
         var length = zEnds[layer+1] - zEnds[layer];

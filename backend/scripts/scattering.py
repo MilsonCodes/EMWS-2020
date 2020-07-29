@@ -78,7 +78,7 @@ class Structure:
             try:
                 return self.name + ': ' + str(self.length) + '\nEigen: ' + self.eigVal + self.eigVec
             except:
-                return self.name + ': ' + str(self.length) 
+                return self.name + ': ' + str(self.length)
 
     # Instance variables for each Structure object
     def __init__(self, num, omega, k1, k2):
@@ -238,7 +238,7 @@ class Structure:
                 interfaces[i] = ifaces[i] - ifaces[i-1]
         for i in range(I):
             expVecLeft = np.exp(np.multiply(self.layers[i].eigVal,(interfaces[i+1] - interfaces[i])))
-            expVecRight = np.exp(self.layers[i+1].eigVal * (interfaces[i+1] - interfaces[i+1]))
+            expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, (interfaces[i+1] - interfaces[i+1])))
             leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
             rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
         for i in range(I):
@@ -248,7 +248,7 @@ class Structure:
                     s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
         self.scattering = s
         return s
-        
+
     def calcConstants(self, c1, c2, c3, c4):
         scattering = self.calcScattering()
         layers = self.num
@@ -261,8 +261,8 @@ class Structure:
         for i in range(4):
             f[i] = np.subtract(f.item(i), np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
             aug = 4 * (interfaces-1) + i
-            aug1 = 4 * (interfaces+1) - 1 
-            aug2 = 4 * (interfaces+1) - 2 
+            aug1 = 4 * (interfaces+1) - 1
+            aug2 = 4 * (interfaces+1) - 2
             f[aug] = np.subtract(f.item(aug), np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
         bPrime = solve(s,f)
         #bPrime = lstsq(s, f)[0] # May want to use solve instead
@@ -279,9 +279,9 @@ class Structure:
                 # Set solution equal to the mode times the constant
                 sol = self.layers[i].modes[0][j] * b[i*4+j]
                 # Store solution in the structure layer
-                self.layers[i].solution[j] = sol 
+                self.layers[i].solution[j] = sol
         return b
-   
+
     # Get all the solutions for the structure
     def solution(self):
         solutions = []
@@ -296,7 +296,7 @@ class Structure:
         for n in range(self.num):
             for i in range(4):
                 total =+ sol[n][i]
-                
+
         return total == 0
 
     def printSol(self):
@@ -414,8 +414,8 @@ def test():
     print('\nFinal Scattering Matrix:\n' + str(s.scattering))
     print('Sum of solutions in all layers is 0: ' + str(s.checkSol()))
     print('\n\nEnd of test\n\n')
-    
-    
+
+
 def main():
     start = time.perf_counter()
     test()
