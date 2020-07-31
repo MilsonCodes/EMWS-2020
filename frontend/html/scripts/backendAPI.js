@@ -97,7 +97,7 @@ const convertJSLayersToPythonLayers = layers => {
 
     newLayers[i] = {
       name: curLayer.layerName,
-      length: curLayer.length,
+      length: parseInt(curLayer.length),
       epsilon: convertComplexMatrixToPythonParsableMatrix(curLayer.epsilonA),
       mu: convertComplexMatrixToPythonParsableMatrix(curLayer.muA)
     }
@@ -315,6 +315,21 @@ class Structure {
       this.eigenOrderRight = array_move(this.eigenOrderRight, oldIndex, newIndex)
     else
       this.eigenOrderLeft = array_move(this.eigenOrderLeft, oldIndex, newIndex)
+  }
+
+  switchInOrder(oldIndex, newIndex, toRight) {
+    const array_switch = (arr, old_index, new_index) => {
+      var temp = arr[new_index]
+      arr[new_index] = arr[old_index]
+      arr[old_index] = temp
+
+      return arr
+    }
+
+    if(toRight)
+      this.eigenOrderRight = array_switch(this.eigenOrderRight, oldIndex, newIndex)
+    else
+      this.eigenOrderLeft = array_switch(this.eigenOrderLeft, oldIndex, newIndex)
   }
 
   resetPermuteOrder(toRight) {

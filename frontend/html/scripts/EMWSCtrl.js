@@ -117,9 +117,9 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   }
 
   function hideIfInDevMode() {
-    const hostname = window && window.location && window.location.hostname;
+    const hostname = window && window.location && window.location.hostname; 
     
-    var devMode = hostname !== "math.lsu.edu";        //Change if making developmental changes!!
+    var devMode = hostname !== "www.math.lsu.edu";
 
     if (getQueryVariable("devMode") === "true") devMode = true;
 
@@ -345,8 +345,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
     document.getElementById(incStr + "0").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[0]].toString()
     document.getElementById(incStr + "1").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[1]].toString()
-    document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[0]].toString()
-    document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[1]].toString()
+    document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[2]].toString()
+    document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[3]].toString()
   }
 
   $scope.checkBoxes = (id, isBackMode, isFieldTab, isChecked) => {
@@ -396,7 +396,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
       var curPos = $scope.structure.getPositionInPermuteOrder(id, true)
 
       if(isChecked) {
-        $scope.structure.permuteOrder(curPos, $scope.forModesChecked, true)
+          $scope.structure.switchInOrder(curPos, 2 + $scope.forModesChecked, true)
 
         $scope.forModesChecked++
       } else {
@@ -405,7 +405,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
         if($scope.forModesChecked == 0)
           $scope.structure.resetPermuteOrder(true)
         else
-          $scope.structure.placePositionBackInOrder(id, $scope.forModesChecked, true)
+          $scope.structure.placePositionBackInOrder(id, 2 + $scope.forModesChecked, true)
       }
 
       if($scope.forModesChecked == 2) {
@@ -422,8 +422,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
         }
       }
 
-      document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[0]].toString()
-      document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[1]].toString()
+      document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[2]].toString()
+      document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[3]].toString()
     }
 
     console.log({ backChecked: $scope.backModesChecked, forChecked: $scope.forModesChecked, forOrder: $scope.structure.getPermuteOrder(true), backOrder: $scope.structure.getPermuteOrder(false) })
