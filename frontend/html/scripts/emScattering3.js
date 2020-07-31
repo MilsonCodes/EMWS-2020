@@ -537,9 +537,7 @@ emScattering3.Struct.prototype.calculateConstantVector = async function(incoming
 
     //console.log({tildeS: tildeS, f: f, tildeB: tildeB, b: b});
 
-    const url = 'https://emws.pythonanywhere.com/structure/constants'
     this.constants = b;
-    verify(this.constants, url)
 }
 
 emScattering3.Struct.prototype.updateScattering = function() {
