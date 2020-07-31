@@ -432,6 +432,8 @@ class Structure {
     this.scattering = res.scattering
     this.constants = res.constants
     this.field = res.field
+
+    console.log(this)
   }
 
   getField() {
