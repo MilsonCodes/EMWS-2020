@@ -223,7 +223,7 @@ class Structure:
         for m in self.maxwell:
             print(m)
 
-    # Calculate the location of the start of each layer
+    # Calculate the location of the endpoints of each layer
     def interfaces(self):
         interfaces = []
         interfaces.append(-self.layers[0].length)
@@ -243,15 +243,18 @@ class Structure:
         rightPsi = [np.zeros(4)] * I
         # Calculate the reference points
         for i in range(layers):
-            # The first interface is always at 0
+            # The first layer reference point is the right endpoint
             if i < 2:
                 references[i] = 0
-            # Calculate the rest of the interfaces
+            # Calculate the rest of the reference points, the left endpoint
             else:
                 references[i] = (ifaces[i] - ifaces[i-1])
+        # Calculate the locations (z-values) of the interfaces
         for i in range(I):
+            # First interface is always at 0
             if i == 0:
                 interfaces[i] = 0
+            # Next interface is the endpoint of the following layer
             else:
                 interfaces[i] = ifaces[i+1]
         for i in range(I):
@@ -259,11 +262,13 @@ class Structure:
             expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, (interfaces[i] - references[i+1])))
             leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec), np.diag(expVecLeft))
             rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec), np.diag(expVecRight))
-        for i in range(I):
-            for j in range(4):
-                for k in range(4):
-                    s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
-                    s[4*i+j][4*(i+1)+k] = -rightPsi[i].item(j,k)
+        for inter in range(I):
+            for i in range(4):
+                for j in range(4):
+                    s[4*inter+i][4*inter+j] = leftPsi[inter].item(i,j)
+                    s[4*inter+i][4*(inter+1)+j] = -rightPsi[inter].item(i,j)
+                    # s[4*(inter-1)+(i)-1][4*(inter-1)+(j)-1] = leftPsi[inter].item(i,j)
+                    # s[4*(inter-1)+(i)-1][4*(inter)+(j)-1] = -rightPsi[inter].item(i,j)
         self.scattering = s
         return s
 
@@ -279,10 +284,11 @@ class Structure:
                 s[i][j] = scattering[i][j+2]
         for i in range(4):
             f[i] = np.subtract(f.item(i), np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
-            aug = 4 * (interfaces-1) + i
-            aug1 = 4 * (interfaces+1) - 1
-            aug2 = 4 * (interfaces+1) - 2
-            f[aug] = np.subtract(f.item(aug), np.subtract(np.multiply(scattering[aug][aug2],c3),np.multiply(scattering[aug][aug1],c4)))
+            aug1 = 4*(interfaces-1)+i-1
+            aug2 = 4*(interfaces+1)-2
+            aug3 = 4*(interfaces+1)-1
+            f[aug1] = np.subtract(f.item(aug1), np.subtract(np.multiply(scattering[aug1][aug2],c3),np.multiply(scattering[aug1][aug3],c4)))
+            # f[4*(interfaces-1)+i] = f[4*(interfaces-1)+i] - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c3 - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c4
         bPrime = solve(s,f)
         #bPrime = lstsq(s, f)[0] # May want to use solve instead
         b = np.zeros(4*layers, dtype=complex) # Constants vector
@@ -292,6 +298,11 @@ class Structure:
         b[4*layers-1] = c4
         for i in range(4*interfaces):
             b[i+2] = bPrime[i]
+        # The following is code in mathematica that is currently missing
+        # c = np.zeros((layers,4), dtype=complex)
+        # for layer in range(interfaces):
+        #     for j in range(4):
+        #         c[layer][j] = b[4*layer+j-1]
         self.constants = b
         for i in range(self.num):
             for j in range(4):
