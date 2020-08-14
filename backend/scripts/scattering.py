@@ -9,6 +9,9 @@ np.set_printoptions(precision=6, suppress=True)
 
 DEBUG = False
 
+def range_at_1(end):
+    return range(1, end+1)
+
 def expDiagonal(eigVals, zNorm):
     tmp = [eigVals[0], eigVals[1], eigVals[2], eigVals[3]]
     return np.diag(np.exp(np.multiply(tmp,zNorm)))
@@ -262,11 +265,19 @@ class Structure:
             expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, (interfaces[i] - references[i+1])))
             leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec), np.diag(expVecLeft))
             rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec), np.diag(expVecRight))
-        for inter in range(I):
-            for i in range(4):
-                for j in range(4):
-                    s[4*inter+i][4*inter+j] = leftPsi[inter].item(i,j)
-                    s[4*inter+i][4*(inter+1)+j] = -rightPsi[inter].item(i,j)
+        for inter in range_at_1(I):
+            for i in range_at_1(4):
+                for j in range_at_1(4):
+                    vali = (4 * (inter - 1) + i) - 1
+                    valj = (4 * (inter - 1) + j) - 1
+                    valj2 = 4 * inter + j - 1
+                    s[vali][valj] = leftPsi[inter-1].item(i-1,j-1)
+                    s[vali][valj2] = -rightPsi[inter-1].item(i-1,j-1)
+        # for inter in range(I):
+        #     for i in range(4):
+        #         for j in range(4):
+        #             s[4*inter+i][4*inter+j] = leftPsi[inter].item(i,j)
+        #             s[4*inter+i][4*(inter+1)+j] = -rightPsi[inter].item(i,j)
                     # s[4*(inter-1)+(i)-1][4*(inter-1)+(j)-1] = leftPsi[inter].item(i,j)
                     # s[4*(inter-1)+(i)-1][4*(inter)+(j)-1] = -rightPsi[inter].item(i,j)
         self.scattering = s
@@ -282,13 +293,19 @@ class Structure:
         for i in range(4*interfaces):
             for j in range(4*interfaces):
                 s[i][j] = scattering[i][j+2]
-        for i in range(4):
-            f[i] = np.subtract(f.item(i), np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
+        for i in range_at_1(4):
+            f[i-1] = np.subtract(f.item(i-1), np.subtract(np.multiply(scattering[i-1][0],c1),np.multiply(scattering[i-1][1],c2)))
             aug1 = 4*(interfaces-1)+i-1
             aug2 = 4*(interfaces+1)-2
             aug3 = 4*(interfaces+1)-1
             f[aug1] = np.subtract(f.item(aug1), np.subtract(np.multiply(scattering[aug1][aug2],c3),np.multiply(scattering[aug1][aug3],c4)))
-            # f[4*(interfaces-1)+i] = f[4*(interfaces-1)+i] - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c3 - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c4
+        # for i in range(4):
+        #     f[i] = np.subtract(f.item(i), np.subtract(np.multiply(scattering[i][0],c1),np.multiply(scattering[i][1],c2)))
+        #     aug1 = 4*(interfaces-1)+i-1
+        #     aug2 = 4*(interfaces+1)-2
+        #     aug3 = 4*(interfaces+1)-1
+        #     f[aug1] = np.subtract(f.item(aug1), np.subtract(np.multiply(scattering[aug1][aug2],c3),np.multiply(scattering[aug1][aug3],c4)))
+        #     f[4*(interfaces-1)+i] = f[4*(interfaces-1)+i] - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c3 - scattering[4*(interfaces-1)+i][4*(interfaces+1)-1]*c4
         bPrime = solve(s,f)
         #bPrime = lstsq(s, f)[0] # May want to use solve instead
         b = np.zeros(4*layers, dtype=complex) # Constants vector
@@ -300,9 +317,9 @@ class Structure:
             b[i+2] = bPrime[i]
         # The following is code in mathematica that is currently missing
         # c = np.zeros((layers,4), dtype=complex)
-        # for layer in range(interfaces):
-        #     for j in range(4):
-        #         c[layer][j] = b[4*layer+j-1]
+        # for layer in range_at_1(interfaces):
+        #     for j in range_at_1(4):
+        #         c[layer-1][j-1] = b[4*(layer-1)+j-1]
         self.constants = b
         for i in range(self.num):
             for j in range(4):
@@ -339,17 +356,35 @@ class Structure:
         num_layers = self.num
         z_ends = self.interfaces()
         interfaces = [0] * num_layers
+        references = np.zeros(num_layers)   # zref
         z_arr = []
         Ex = []
         Ey = []
         Hx = []
         Hy = []
 
-        for z in range(num_layers):
-            if z < 2:
-                interfaces[z] = 0
+        # for z in range(num_layers):
+        #     if z < 2:
+        #         interfaces[z] = 0
+        #     else:
+        #         interfaces[z] = z_ends[z] - z_ends[z-1]
+
+        # Calculate the reference points
+        for i in range(num_layers):
+            # The first layer reference point is the right endpoint
+            if i < 2:
+                references[i] = 0
+            # Calculate the rest of the reference points, the left endpoint
             else:
-                interfaces[z] = z_ends[z] - z_ends[z-1]
+                references[i] = (z_ends[i] - z_ends[i-1])
+        # Calculate the locations (z-values) of the interfaces
+        for i in range(num_layers-1):
+            # First interface is always at 0
+            if i == 0:
+                interfaces[i] = 0
+            # Next interface is the endpoint of the following layer
+            else:
+                interfaces[i] = z_ends[i+1]
 
         for layer in range(num_layers):
             length = z_ends[layer+1] - z_ends[layer]
@@ -367,7 +402,7 @@ class Structure:
 
                 scalar = np.exp(np.multiply(np.complex(0.0, 1.0), piScalar))
                 scalarMat = np.multiply(scalar, self.layers[layer].eigVec.transpose())
-                expDiag = np.diag(np.exp(np.multiply(self.layers[layer].eigVal, (z - interfaces[layer]))))
+                expDiag = np.diag(np.exp(np.multiply(self.layers[layer].eigVal, (z - references[layer]))))
                 expMat = np.matmul(scalarMat, expDiag)
                 fieldVec = np.matmul(expMat, current_c)
 
