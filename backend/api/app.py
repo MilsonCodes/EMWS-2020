@@ -11,20 +11,20 @@ from scripts.scattering import Structure as s
 # Run server by calling python app.py
 app = Flask(__name__)
 # List of accepted origins
-origins = ["http://localhost:8000", "https://www.math.lsu.edu/"]
-# Change origins to '*' if this method gives issues
+origins = ["http://localhost:8000", "https://www.math.lsu.edu"]
+# Change origins to '*' if this solution gives issues
 CORS(app, resources={r"/structure": {"origins": origins}})
 
 # Greeting message, currently unused
-base = '''
-Welcome to the EMWS API!
-\n\n
-Source code and documentation can be found here:
-\n\thttps://github.com/MilsonCodes/EMWS-2020
-\n\n
-The live site can be found here:
-\n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
-'''
+base =  '''
+        Welcome to the EMWS API!
+        \n\n
+        Source code and documentation can be found here:
+        \n\thttps://github.com/MilsonCodes/EMWS-2020
+        \n\n
+        The live site can be found here:
+        \n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
+    '''
 
 # Base route example
 @app.route('/')
@@ -157,6 +157,7 @@ def decode_constants(m):
 @cross_origin()
 def modes():
     assert request.method == 'POST'
+    # print('Mode route beginning')
     # Parse data
     req = json.loads(request.data)
     omega = req['omega']
@@ -181,7 +182,6 @@ def modes():
     modes = []
     i = 0
     for layer in struct.layers:
-        #print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal.tolist())
         o = encode_evecs(layer.eigVec.tolist())
@@ -202,6 +202,8 @@ def modes():
         'modes': modes
     }
 
+    # print('Mode route completed')
+
     return json.jsonify(data)
 
 # Route for getting data points
@@ -209,6 +211,7 @@ def modes():
 @cross_origin()
 def field():
     assert request.method == 'POST'
+    # print('Field route beginning')
     req = json.loads(request.data)
     omega = req['omega']
     k1 = req['k1']
@@ -331,6 +334,8 @@ def field():
         field = struct.determineField(num_points)
     data['field'] = field
 
+    # print('Field route completed')
+
     return json.jsonify(data)
 
 # Route to update structure if one exists, else it will create one
@@ -339,6 +344,7 @@ def field():
 @cross_origin()
 def constants():
     assert request.method == 'POST'
+    # print('Constants route beginning')
     # Parse data
     req = json.loads(request.data)
     omega = req['omega']
@@ -384,7 +390,6 @@ def constants():
     e_vecs = []
     i = 0
     for layer in struct.layers:
-        #print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal)
         o = encode_evecs(layer.eigVec.tolist())
@@ -412,6 +417,8 @@ def constants():
     }
 
     response = json.jsonify(data)
+
+    # print('Constants route completed')
 
     return response
 

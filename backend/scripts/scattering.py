@@ -2,23 +2,27 @@ import time
 import numpy as np
 # from scipy.linalg import null_space, lstsq
 from scipy.linalg import solve
-from numpy.linalg import inv
+# from numpy.linalg import inv
 
 # Set precision for printing arrays
 np.set_printoptions(precision=6, suppress=True)
+
+DEBUG = False
 
 def expDiagonal(eigVals, zNorm):
     tmp = [eigVals[0], eigVals[1], eigVals[2], eigVals[3]]
     return np.diag(np.exp(np.multiply(tmp,zNorm)))
 
 def swapArrayIndices(a, i, j):
-    #print('Swapping ' + str(a[i]) + ' and ' + str(a[j]))
+    if (DEBUG):
+        print('Swapping ' + str(a[i]) + ' and ' + str(a[j]))
     a[i], a[j] = a[j], a[i]
     return a
 
 def swapMatrixRows(a, i, j):
     #a[[i, j]] = a[[j,i]]
-    #print('row swap ' + str(i) + ' and ' + str(j))
+    if (DEBUG):
+        print('row swap ' + str(i) + ' and ' + str(j))
     a[:,[i,j]] = a[:,[j,i]]
     return a
 
@@ -27,13 +31,14 @@ def isNumZero(num):
     return (num < precision and num > -precision) or num == 0
 
 def organizeEigen(val, vec):
-    #print(val)
     for i in range(4):
         v = val[i]
         if (not isNumZero(v.imag)) and (isNumZero(v.real)):
-            #print('Eigenvalue ' + str(v) + ' is imaginary')
+            if (DEBUG):
+                print('Eigenvalue ' + str(v) + ' is imaginary')
             if (v.imag > 0) and (not i == 0):
-                #print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to front!')
+                if (DEBUG):
+                    print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to front!')
                 val = swapArrayIndices(val, i, 0)
                 vec = swapMatrixRows(vec, i, 0)
             #elif (v.imag < 0) and (not i == 2):
@@ -41,9 +46,11 @@ def organizeEigen(val, vec):
             #    val = swapArrayIndices(val, i, 2)
             #    vec = swapMatrixRows(vec, i, 2)
         elif (isNumZero(v.imag)) and (not isNumZero(v.real)):
-            #print('Eigenvalue ' + str(v) + ' is real')
+            if (DEBUG):
+                print('Eigenvalue ' + str(v) + ' is real')
             if (v.real < 0) and (not i == 1):
-                #print('Eigenvalue ' + str(v) + ' is negative real. Swapping to second index!')
+                if (DEBUG):
+                    print('Eigenvalue ' + str(v) + ' is negative real. Swapping to second index!')
                 val = swapArrayIndices(val, i, 1)
                 vec = swapMatrixRows(vec, i, 1)
             #elif (v.real > 0) and (not i == 3):
@@ -53,9 +60,11 @@ def organizeEigen(val, vec):
     t1 = val[2]
     t2 = val[3]
     if (isNumZero(t1.imag)) and (not isNumZero(t1.real)):
-        #print('Third entry is real')
+        if (DEBUG):
+            print('Third entry is real')
         if (t1.real > 0):
-            #print('Third entry is positive real')
+            if (DEBUG):
+                print('Third entry is positive real')
             val = swapArrayIndices(val, 2, 3)
             vec = swapMatrixRows(vec, 2, 3)
     return val, vec
@@ -67,7 +76,8 @@ class Structure:
     class Layer:
         # Instance variables for each Layer object
         def __init__(self, name, length, epsilon, mu):
-            #print('     Instanciating Layer')
+            if (DEBUG):
+                print('     Instanciating Layer')
             self.name = name
             self.length = length
             self.epsilon = epsilon
@@ -82,7 +92,8 @@ class Structure:
 
     # Instance variables for each Structure object
     def __init__(self, num, omega, k1, k2):
-        #print('Instanciating Structure')
+        if (DEBUG):
+            print('Instanciating Structure')
         self.num = num
         self.omega = omega
         self.c = 1
@@ -98,24 +109,29 @@ class Structure:
             print(layer)
 
     def removeLayer(self, n):
-        #print('Removing Layer')
+        if (DEBUG):
+            print('Removing Layer')
         self.layers.pop(n)
 
     # Method for adding a layer to the structure
     def addLayer(self, name, length, epsilon, mu):
-        #print('Adding Layer')
+        if (DEBUG):
+            print('Adding Layer')
         l = self.Layer(name, length, epsilon, mu)
         self.layers.append(l)
 
     # Method for inserting a layer into given index n
     def insertLayer(self, name, length, epsilon, mu, n):
-        #print('Inserting Layer')
+        if (DEBUG):
+            print('Inserting Layer')
         l = self.Layer(name, length, epsilon, mu)
         self.layers.insert(n, l)
 
     # Create the maxwell matrices
+    # The matrix is derived from Maxwell's ODEs
     def buildMatrices(self):
-        #print('\nBuilding Maxwell')
+        if (DEBUG):
+            print('\nBuilding Maxwell')
         maxwell_matrices = []
         for layer in self.layers:
             e = layer.epsilon
@@ -158,14 +174,17 @@ class Structure:
 
     # Import maxwell matrices into struct
     def importMatrices(self, matrices):
-        #print('\nImporting Maxwell from Data')
+        if (DEBUG):
+            print('\nImporting Maxwell from Data')
         self.maxwell = matrices
 
     # Calculate the eigenproblem for all layers of the structure
     def calcEig(self):
-        #print('\nCalculating Eigen Problem')
+        if (DEBUG):
+            print('\nCalculating Eigen Problem')
         for n in range(len(self.layers)):
-            #print('For layer ' + str(n+1))
+            if (DEBUG):
+                print('For layer ' + str(n+1))
             #start = time.perf_counter()
             eigVal, eigVec = np.linalg.eig(self.maxwell[n])
             eigVal, eigVec = organizeEigen(eigVal, eigVec)
@@ -174,48 +193,37 @@ class Structure:
             #print(f'Time to calculate Eigensystem: {end-start:0.5f} seconds')
             self.layers[n].eigVal = eigVal
             self.layers[n].eigVec = np.transpose(eigVec)
-            #print(f'Values:\n{self.layers[n].eigVal}')
-            #print(f'Vectors:\n{self.layers[n].eigVec}')
+            if (DEBUG):
+                print(f'Values:\n{self.layers[n].eigVal}')
+            if (DEBUG):
+                print(f'Vectors:\n{self.layers[n].eigVec}')
 
     # Import preexisting eigendata
     def importEig(self, e_vals, e_vecs):
-        #print('\nImporting previously created eigendata')
+        if (DEBUG):
+            print('\nImporting previously created eigendata')
         for n in range(len(self.layers)):
             self.layers[n].eigVal = e_vals[n]
             self.layers[n].eigVec = e_vecs[n]
 
     # Calculate the modes. Result will not contain constant multiplication
     def calcModes(self):
-        #print('\nCalculating Modes')
+        if (DEBUG):
+            print('\nCalculating Modes')
         for layer in self.layers:
             mode = np.zeros((1,4), dtype=complex)
             for n in range(4):
                 mode += np.multiply(np.multiply(np.real(layer.eigVec[n]), np.exp(np.real(layer.eigVal[n]))), layer.length)
             layer.modes = mode
-            #print(str(layer.name) + ' Modes:\nc*' + str(layer.modes))
+            if (DEBUG):
+                print(str(layer.name) + ' Modes:\nc*' + str(layer.modes))
 
     def printMaxwell(self):
         print('Maxwells:')
         for m in self.maxwell:
             print(m)
 
-    def calcTransfer(self):
-        interfaces = self.num-1
-        transferMatrices = [] * interfaces
-        if (self.num > 1):
-            for i in range(interfaces):
-                wNext = inv(np.transpose(self.layers[i+1].eigVec))
-                w = np.transpose(self.layers[i].eigVec)
-                if (i == 0):
-                    zNorm = 0
-                else:
-                    zNorm = self.omega * self.layers[i].length
-                expDia = expDiagonal(self.layers[i].eigVal, zNorm)
-                tmp = w * expDia
-                transferMatrices.append(wNext*tmp)
-        self.transferMatrices = transferMatrices
-        return transferMatrices
-
+    # Calculate the location of the start of each layer
     def interfaces(self):
         interfaces = []
         interfaces.append(-self.layers[0].length)
@@ -223,32 +231,43 @@ class Structure:
             interfaces.append(interfaces[i] + self.layers[i].length)
         return interfaces
 
+    # Calculate the scattering matrix to be used in the constants calulation
     def calcScattering(self):
         layers = self.num
         I = layers - 1
         s = np.zeros((4*I,4*layers), dtype=complex)
-        interfaces = np.zeros(layers)
-        ifaces = self.interfaces()
+        references = np.zeros(layers)   # zref
+        ifaces = self.interfaces()      # zzz
+        interfaces = np.zeros(I)        # zz
         leftPsi = [np.zeros(4)] * I
         rightPsi = [np.zeros(4)] * I
+        # Calculate the reference points
         for i in range(layers):
-            if i < I:
+            # The first interface is always at 0
+            if i < 2:
+                references[i] = 0
+            # Calculate the rest of the interfaces
+            else:
+                references[i] = (ifaces[i] - ifaces[i-1])
+        for i in range(I):
+            if i == 0:
                 interfaces[i] = 0
             else:
-                interfaces[i] = ifaces[i] - ifaces[i-1]
+                interfaces[i] = ifaces[i+1]
         for i in range(I):
-            expVecLeft = np.exp(np.multiply(self.layers[i].eigVal,(interfaces[i+1] - interfaces[i])))
-            expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, (interfaces[i+1] - interfaces[i+1])))
-            leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec),np.diag(expVecLeft))
-            rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec),np.diag(expVecRight))
+            expVecLeft = np.exp(np.multiply(self.layers[i].eigVal,(interfaces[i] - references[i])))
+            expVecRight = np.exp(np.multiply(self.layers[i+1].eigVal, (interfaces[i] - references[i+1])))
+            leftPsi[i] = np.matmul(np.transpose(self.layers[i].eigVec), np.diag(expVecLeft))
+            rightPsi[i] = np.matmul(np.transpose(self.layers[i+1].eigVec), np.diag(expVecRight))
         for i in range(I):
             for j in range(4):
                 for k in range(4):
                     s[4*i+j][4*i+k] = leftPsi[i].item(j,k)
-                    s[4*i+j][4*(i+1)+k] = np.negative(rightPsi[i].item(j,k))
+                    s[4*i+j][4*(i+1)+k] = -rightPsi[i].item(j,k)
         self.scattering = s
         return s
 
+    # Calculate the constants for each layer to be used in the fields/solutions
     def calcConstants(self, c1, c2, c3, c4):
         scattering = self.calcScattering()
         layers = self.num
@@ -316,7 +335,7 @@ class Structure:
         Hy = []
 
         for z in range(num_layers):
-            if z < num_layers - 1:
+            if z < 2:
                 interfaces[z] = 0
             else:
                 interfaces[z] = z_ends[z] - z_ends[z-1]
@@ -326,8 +345,9 @@ class Structure:
 
             current_c = self.constants[layer*4:4+(layer*4)]
 
-            # print("Constant vector at layer " + str(layer))
-            # print(current_c)
+            if (DEBUG):
+                print("Constant vector at layer " + str(layer))
+                print(current_c)
 
             for i in range(num_points):
                 z = z_ends[layer] + (i * length) / num_points
