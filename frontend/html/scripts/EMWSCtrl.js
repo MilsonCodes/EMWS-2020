@@ -54,6 +54,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   $scope.EY = 'Eᵧ';                                                       //Label for Ey
   $scope.HX = 'Hₓ';                                                       //Label for Hx
   $scope.HY = 'Hᵧ';                                                       //Label for Hy
+  $scope.expRunning = false;
 
 
   //Defined default values of the layers
@@ -442,7 +443,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
   /** Runs the experiment in the Field tab. */
   $scope.runExp = async function () {
-    console.log("Running...")
+    console.log("Running...");
+    $scope.expRunning = true;
     $("canvas").remove();
     getArrays();
     console.log("Updating Structure...")
@@ -451,6 +453,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     console.log("Creating charts...")
     createFieldChart();
     createAnim();
+    $scope.expRunning = false;
     //$scope.buildFieldsWithAnim();
   };
 
@@ -1011,10 +1014,12 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
   /** Runs the experiment in the Transmissions tab. WIP */
   $scope.runTransmissionExp = function () {
+    $scope.expRunning = true;
     getArrays();
     updateAll();
 
     createTransmissionChart();
+    $scope.expRunning = false;
   }
 
   /** Creates the chart in the Transmissions tab. WIP */
