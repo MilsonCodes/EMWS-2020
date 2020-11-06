@@ -635,6 +635,9 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
+                <div class="pace pace-active" ng-show="expRunning">
+                  <div class="pace-activity"></div>
+                </div>
                 <div class="box-header">
                     <h3>Coefficients of Incoming Modes</h3>
                     <small>Enter complex amplitudes of the incoming modes.</small>
@@ -673,7 +676,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class='btn red' ng-click="runExp()" ng-disabled="expRunning">Run Experiment</button>
+                            <button type="button" class='btn red' ng-click="runExp()" ng-disabled="expRunning">
+                              Run Experiment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -891,6 +896,9 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
+                <div class="pace pace-active" ng-show="expRunning">
+                  <div class="pace-activity"></div>
+                </div>
                 <div class="box-header">
                     <h3>Coefficients of Incoming Modes</h3>
                     <small>Enter complex amplitudes of the incoming modes.</small>
