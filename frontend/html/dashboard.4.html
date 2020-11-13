@@ -635,7 +635,7 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
-                <div class="pace pace-active" ng-show="expRunning">
+                <div class="pace pace-active" ng-show="expRunning==true">
                   <div class="pace-activity"></div>
                 </div>
                 <div class="box-header">
@@ -676,7 +676,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class='btn red' ng-click="runExp()" ng-disabled="expRunning">
+                            <button type="button" class='btn red' ng-click="runExp()" ng-disabled="expRunning==true">
                               Run Experiment
                             </button>
                         </div>
@@ -896,7 +896,7 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
-                <div class="pace pace-active" ng-show="expRunning">
+                <div class="pace pace-active" ng-show="expRunning==true">
                   <div class="pace-activity"></div>
                 </div>
                 <div class="box-header">
@@ -937,7 +937,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class='btn red' ng-click="runTransmissionExp()" ng-disabled="expRunning">Run Experiment</button>
+                            <button type="button" class='btn red' ng-click="runTransmissionExp()" ng-disabled="expRunning==true">Run Experiment</button>
                         </div>
                     </div>
                 </div>

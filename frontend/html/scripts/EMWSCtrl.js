@@ -453,7 +453,11 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     console.log("Creating charts...")
     createFieldChart();
     createAnim();
-    $scope.expRunning = false;
+    setTimeout(() => {
+      $scope.expRunning = false;
+      $scope.$apply();
+      console.log("Finished running experiment...");
+    }, 250);
     //$scope.buildFieldsWithAnim();
   };
 
