@@ -392,8 +392,9 @@ def constants():
     for layer in struct.layers:
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal)
-        o = encode_evecs(layer.eigVec.tolist())
-
+        o = []
+        for j in range(4):
+            o.append(encode_eigen(layer.eigVec[j].tolist()[0]))
         maxwells.append(m)
         e_vals.append(n)
         e_vecs.append(o)
