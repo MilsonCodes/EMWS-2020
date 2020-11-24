@@ -54,6 +54,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   $scope.EY = 'Eᵧ';                                                       //Label for Ey
   $scope.HX = 'Hₓ';                                                       //Label for Hx
   $scope.HY = 'Hᵧ';                                                       //Label for Hy
+  $scope.expRunning = false;
 
 
   //Defined default values of the layers
@@ -100,7 +101,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
     //$(".p1").addClass("ng-hide");
 
-    setTimeout(hideIfInDevMode, 250);
+    setTimeout(hideIfInDevMode, 250)
   }
 
   function getQueryVariable(variable) {
@@ -117,7 +118,9 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   }
 
   function hideIfInDevMode() {
-    var devMode = true;        //Change if making developmental changes!!
+    const hostname = window && window.location && window.location.hostname; 
+    
+    var devMode = hostname !== "www.math.lsu.edu";
 
     if (getQueryVariable("devMode") === "true") devMode = true;
 
@@ -209,16 +212,20 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   }
 
   /** Calculates the modes. */
-  $scope.buildModes = function () {
+  $scope.buildModes = async function () {
     getArrays();
-    updateAll();
+    console.log("Updating Crystal...")
+    await updateCrystal();
+    updateCheckBoxes(true);
+    updateCheckBoxes(false);
   }
 
   /** Checks the state of the check boxes in the Field tabs and sets the order of the selected modes.
    * 
    * @param fieldTab - Boolean if tab being checked is fieldTab (ONLY USE TRUE OR FALSE)
+   * @deprecated
    */
-  $scope.checkBoxes = function (fieldTab) {
+  $scope.checkBoxesOLD = function (fieldTab) {
     var backChecked = 0;                //Create variable for amount of leftward mode boxes checked
     var forChecked = 0;                 //Create variable for amount of rightward mode boxes checked
 
@@ -334,6 +341,95 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     }
   }
 
+  function updateCheckBoxes(isFieldTab) {
+    var incStr = "incoming" + (isFieldTab ? "" : "T");            //Create variable for base of element id names
+
+    document.getElementById(incStr + "0").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[0]].toString()
+    document.getElementById(incStr + "1").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[1]].toString()
+    document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[2]].toString()
+    document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[3]].toString()
+  }
+
+  $scope.checkBoxes = (id, isBackMode, isFieldTab, isChecked) => {
+    var backChkStr = "backModeChk" + (isFieldTab ? "" : "T");     //Create variable for base of element id names
+    var forChkStr = "forModeChk" + (isFieldTab ? "" : "T");       //Create variable for base of element id names
+    var incStr = "incoming" + (isFieldTab ? "" : "T");            //Create variable for base of element id names
+
+    if(!$scope.backModesChecked)
+      $scope.backModesChecked = 0
+    
+    if(!$scope.forModesChecked)
+      $scope.forModesChecked = 0
+
+    if(isBackMode) {
+      var curPos = $scope.structure.getPositionInPermuteOrder(id, false)
+
+      if(isChecked) {
+        $scope.structure.permuteOrder(curPos, $scope.backModesChecked, false)
+
+        $scope.backModesChecked++
+      } else {
+        $scope.backModesChecked--
+
+        if($scope.backModesChecked == 0)
+          $scope.structure.resetPermuteOrder(false)
+        else
+          $scope.structure.placePositionBackInOrder(id, $scope.backModesChecked, false)
+      }
+
+      if($scope.backModesChecked == 2) {
+        for(let i = 0; i < 4; i++) {
+          var elem = document.getElementById(backChkStr + (i+1))
+
+          if(!elem.checked) elem.disabled = true
+        }
+      } else if($scope.backModesChecked < 2) {
+        for(let i = 0; i < 4; i++) {
+          var elem = document.getElementById(backChkStr + (i+1))
+
+          if(elem.disabled) elem.disabled = false
+        }
+      }
+
+      document.getElementById(incStr + "0").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[0]].toString()
+      document.getElementById(incStr + "1").innerHTML = $scope.modesBack[$scope.structure.getPermuteOrder(false)[1]].toString()
+    } else {
+      var curPos = $scope.structure.getPositionInPermuteOrder(id, true)
+
+      if(isChecked) {
+          $scope.structure.switchInOrder(curPos, 2 + $scope.forModesChecked, true)
+
+        $scope.forModesChecked++
+      } else {
+        $scope.forModesChecked--
+
+        if($scope.forModesChecked == 0)
+          $scope.structure.resetPermuteOrder(true)
+        else
+          $scope.structure.placePositionBackInOrder(id, 2 + $scope.forModesChecked, true)
+      }
+
+      if($scope.forModesChecked == 2) {
+        for(let i = 0; i < 4; i++) {
+          var elem = document.getElementById(forChkStr + (i+1))
+
+          if(!elem.checked) elem.disabled = true
+        }
+      } else if($scope.forModesChecked < 2) {
+        for(let i = 0; i < 4; i++) {
+          var elem = document.getElementById(forChkStr + (i+1))
+
+          if(elem.disabled) elem.disabled = false
+        }
+      }
+
+      document.getElementById(incStr + "2").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[2]].toString()
+      document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[3]].toString()
+    }
+
+    console.log({ backChecked: $scope.backModesChecked, forChecked: $scope.forModesChecked, forOrder: $scope.structure.getPermuteOrder(true), backOrder: $scope.structure.getPermuteOrder(false) })
+  }
+
   $scope.adjustIncoming = () => {
     $scope.structure.setIncoming($scope.incoming)
   }
@@ -347,7 +443,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
   /** Runs the experiment in the Field tab. */
   $scope.runExp = async function () {
-    console.log("Running...")
+    console.log("Running...");
+    $scope.expRunning = true;
     $("canvas").remove();
     getArrays();
     console.log("Updating Structure...")
@@ -356,6 +453,11 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     console.log("Creating charts...")
     createFieldChart();
     createAnim();
+    setTimeout(() => {
+      $scope.expRunning = false;
+      $scope.$apply();
+      console.log("Finished running experiment...");
+    }, 250);
     //$scope.buildFieldsWithAnim();
   };
 
@@ -372,6 +474,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
   /** Updates the modes using the structure's Eigensystems and eigenvalues. */
   function updateModes() {
+    /* OLD CODE
     var lastEigensystem = $scope.crystal.Struct.Eigensystems.length - 1;
     var eigensystems = $scope.crystal.Struct.Eigensystems;
 
@@ -386,7 +489,26 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
         parseFloat(math.im(eigensystems[0][i].eigenvalue)).toFixed(4)
       );
     }
+    */
+
+    var eigenvalues = $scope.structure.getEigenvalues()
+    var lastSys = eigenvalues.length - 1
+
+    console.log(eigenvalues ? "found eigenvalues for modes" : "no eigenvalues for modes :(")
+
+    for (let i = 0; i < 4; i++) {
+      $scope.modesBack[i] = math.complex(
+        parseFloat(eigenvalues[lastSys][i].re).toFixed(4),
+        parseFloat(eigenvalues[lastSys][i].im).toFixed(4)
+      );
+
+      $scope.modesForward[i] = math.complex(
+        parseFloat(eigenvalues[0][i].re).toFixed(4),
+        parseFloat(eigenvalues[0][i].im).toFixed(4)
+      );
+    }
   }
+
   /** Updates the Photonic Crystal. */
   async function updateCrystal() {
     var k = [Number($scope.k1), Number($scope.k2), Number($scope.o)];
@@ -403,6 +525,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     console.timeEnd("Backend Time")
 
     console.log($scope.structure)
+
+    updateModes()
   };
 
   /** Updates the field using the Photonic Crystal. */
@@ -421,9 +545,8 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
   async function updateAll() {
     console.log("Updating Crystal...")
     await updateCrystal();
-    updateModes();
-    $scope.checkBoxes(true);
-    $scope.checkBoxes(false);
+    updateCheckBoxes(true);
+    updateCheckBoxes(false);
     console.log("Updating Field...")
     await updateFields();
   }
@@ -895,10 +1018,12 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
   /** Runs the experiment in the Transmissions tab. WIP */
   $scope.runTransmissionExp = function () {
+    $scope.expRunning = true;
     getArrays();
     updateAll();
 
     createTransmissionChart();
+    $scope.expRunning = false;
   }
 
   /** Creates the chart in the Transmissions tab. WIP */

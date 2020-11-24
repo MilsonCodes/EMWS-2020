@@ -54,7 +54,7 @@
         <div class="panel box no-border m-b-xs">
             <div id="c_1" class="collapse in">
                 <div class="box-body">
-                    <p class="text-black-dk" style="font-size:0.95rem"> The development of this graphical user interface was supported by grant DMS-1411393 (2014-2018) from the National Science Foundation at Louisiana State University under the guidance of PI Stephen P. Shipman.  As one of the projects covered by the grant, undergraduate students created the mathematical code and web interface to compute and simulate harmonic electromagnetic fields in layered media.  The goal is to make available to the community a versatile online application for the computation of EM fields in media with any number of layers having arbitrary electric and magnetic tensors.  The objectives are (1) to allow scientists to explore phenomena of scattering, guided modes, and resonance in the most general EM layered media and (2) to provide a pedagogical tool for students and professionals to learn EM in layered media.</p>
+                    <p class="text-black-dk" style="font-size:0.95rem"> The development of this graphical user interface was supported by grants DMS-1411393 and DMS-1814902 from the National Science Foundation at Louisiana State University under the guidance of PI Stephen P. Shipman.  As one of the projects covered by the grant, undergraduate students created the mathematical code and web interface to compute and simulate harmonic electromagnetic fields in layered media.  The goal is to make available to the community a versatile online application for the computation of EM fields in media with any number of layers having arbitrary electric and magnetic tensors.  The objectives are (1) to allow scientists to explore phenomena of scattering, guided modes, and resonance in the most general EM layered media and (2) to provide a pedagogical tool for students and professionals to learn EM in layered media.</p>
                     <p class= "text-black-dk" style="font-size:0.95rem">The project is in its initial stages and is being further developed by undergraduate students through various funding sources, including President’s Aid from Louisiana State University.  Further developments include a tutorial on the theory of electrodynamics in layered media, a user manual, computation of transmission and reflection coefficients as functions of frequency and angle of incidence, and computation of dispersion relations for pure and leaky guided modes.</p>
                 </div>
             </div>
@@ -133,20 +133,66 @@
           </div>
         </div>-->
       </div>
+      <br/>
+      <h4 class="m-a-0 m-b-sm text-md">About Us</h4>
+      <div class="m-b" id="about-us-box">
+        <div class="panel box no-border m-b-xs">
+          <div id="c_1" class="collapse in">
+            <div class="box-body">
+              <div id="about-shipman">
+                <h5 class="m-a-0 text-md m-b-0">Stephen Shipman</h5>
+                <div id="shipman-links">
+                  <small class="text-muted" style="font-size:0.8rem">
+                    Professor | <a href="https://www.math.lsu.edu/~shipman/" target="_blank" style="text-decoration: underline;">Website</a>
+                  </small>
+                </div>
+                <p class="text-black-dk m-t-sm m-b-0" style="font-size:0.95rem">
+                  Stephen Shipman, professor of mathematics at Louisiana State University, oversees this
+                  project as an undergraduate component of National Science Foundation grants DMS-1411393 and DMS-1814902.
+                </p>
+              </div>
+              <br/>
+              <div id="about-templet">
+                <h5 class="m-a-0 text-md m-b-0">Noah Templet</h5>
+                <div id="templet-links">
+                  <small class="text-muted" style="font-size:0.8rem">
+                    Web Developer | <a href="https://noahtemplet.dev" target="_blank" style="text-decoration: underline;">Portfolio</a> | <a href="https://github.com/w3aseL" target="_blank" style="text-decoration: underline;">GitHub</a>
+                  </small>
+                </div>
+                <p class="text-black-dk m-t-sm m-b-0" style="font-size:0.95rem">
+                  LSU '22 Computer Science Major. Software engineer with interests in web design, machine learning, computer hardware, and computer networking.
+                </p>
+              </div>
+              <br/>
+              <div id="about-sheppard">
+                <h5 class="m-a-0 text-md m-b-0">Michael Sheppard III</h5>
+                <div id="sheppard-links">
+                  <small class="text-muted" style="font-size:0.8rem">
+                    Web Developer | <a href="https://github.com/MilsonCodes" target="_blank" style="text-decoration: underline;">GitHub</a>
+                  </small>
+                </div>
+                <p class="text-black-dk m-t-sm m-b-0" style="font-size:0.95rem">
+                  LSU '21 Computer Science Major, Mathematics Minor. Software engineer with interests in web design, mobile developement, and AI.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-sm-4 col-md-3">
       <h4 class="m-a-0 m-b-sm text-md">Credits</h4>
       <div class="box">
         <ul class="list inset">
           <li class="list-item">
-            <a href="https://www.math.lsu.edu/~shipman/" class="list-left">
+            <a href="https://www.math.lsu.edu/~shipman/" target="_blank" class="list-left">
               <span class="w-40 circle avatar accent">
                 <span>S</span>
                 <i class="away b-white"></i>
               </span>
             </a>
             <div class="list-body">
-              <div><a href="https://www.math.lsu.edu/~shipman/">Stephen Shipman</a></div>
+              <div><a href="https://www.math.lsu.edu/~shipman/" target="_blank">Stephen Shipman</a></div>
               <small class="text-muted text-ellipsis">Professor, Mathematics</small>
             </div>
           </li>
@@ -199,14 +245,14 @@
             </div>
           </li>
           <li class="list-item">
-            <a href class="list-left">
+            <a href="https://noahtemplet.dev/" target="_blank" class="list-left">
               <span class="w-40 circle avatar brown">
                 <span>N</span>
                 <i class="away b-white"></i>
               </span>
             </a>
             <div class="list-body">
-              <div><a href="https://noahtemplet.dev/">Noah Templet</a></div>
+              <div><a href="https://noahtemplet.dev/" target="_blank">Noah Templet</a></div>
               <small class="text-muted text-ellipsis">Web Developer</small>
             </div>
           </li>
@@ -533,23 +579,23 @@
                             <!--<p> {{mBack1}} </p>
                             <p> {{mBack2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[0]}}
-                                    <input type="checkbox" id="backModeChk1">
+                                <label class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" ng-model="checkB1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, true, true, checkB1)" id="backModeChk1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[1]}}
-                                    <input type="checkbox" id="backModeChk2">
+                                <label class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" ng-model="checkB2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, true, true, checkB2)" id="backModeChk2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[2]}}
-                                    <input type="checkbox" id="backModeChk3">
+                                <label class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" ng-model="checkB3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, true, true, checkB3)" id="backModeChk3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesBack[3]}}
-                                    <input type="checkbox" id="backModeChk4">
+                                <label class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" ng-model="checkB4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, true, true, checkB4)" id="backModeChk4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -561,23 +607,23 @@
                             <!--<p> {{mFor1}} </p>
                             <p> {{mFor2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[0]}}
-                                    <input type="checkbox" id="forModeChk1">
+                                <label class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" ng-model="checkF1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, false, true, checkF1)" id="forModeChk1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[1]}}
-                                    <input type="checkbox" id="forModeChk2">
+                                <label class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" ng-model="checkF2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, false, true, checkF2)" id="forModeChk2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[2]}}
-                                    <input type="checkbox" id="forModeChk3">
+                                <label class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" ng-model="checkF3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, false, true, checkF3)" id="forModeChk3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(true)" class="checkboxCont">{{modesForward[3]}}
-                                    <input type="checkbox" id="forModeChk4">
+                                <label class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" ng-model="checkF4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, false, true, checkF4)" id="forModeChk4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -589,6 +635,9 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
+                <div class="pace pace-active" ng-show="expRunning==true">
+                  <div class="pace-activity"></div>
+                </div>
                 <div class="box-header">
                     <h3>Coefficients of Incoming Modes</h3>
                     <small>Enter complex amplitudes of the incoming modes.</small>
@@ -627,7 +676,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class='btn red' ng-click="runExp()">Run Experiment</button>
+                            <button type="button" class='btn red' ng-click="runExp()" ng-disabled="expRunning==true">
+                              Run Experiment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -789,23 +840,23 @@
                             <!--<p> {{mBack1}} </p>
                             <p> {{mBack2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[0]}}
-                                    <input type="checkbox" id="backModeChkT1">
+                                <label class="checkboxCont">{{modesBack[0]}}
+                                    <input type="checkbox" ng-model="checkTB1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, true, false, checkTB1)" id="backModeChkT1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[1]}}
-                                    <input type="checkbox" id="backModeChkT2">
+                                <label class="checkboxCont">{{modesBack[1]}}
+                                    <input type="checkbox" ng-model="checkTB2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, true, false, checkTB2)" id="backModeChkT2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[2]}}
-                                    <input type="checkbox" id="backModeChkT3">
+                                <label class="checkboxCont">{{modesBack[2]}}
+                                    <input type="checkbox" ng-model="checkTB3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, true, false, checkTB3)" id="backModeChkT3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesBack[3]}}
-                                    <input type="checkbox" id="backModeChkT4">
+                                <label class="checkboxCont">{{modesBack[3]}}
+                                    <input type="checkbox" ng-model="checkTB4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, true, false, checkTB4)" id="backModeChkT4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -817,23 +868,23 @@
                             <!--<p> {{mFor1}} </p>
                             <p> {{mFor2}} </p>-->
                             <div class="form-group row" style="margin-left:0rem">
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[0]}}
-                                    <input type="checkbox" id="forModeChkT1">
+                                <label class="checkboxCont">{{modesForward[0]}}
+                                    <input type="checkbox" ng-model="checkTF1" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(0, false, false, checkTF1)" id="forModeChkT1">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[1]}}
-                                    <input type="checkbox" id="forModeChkT2">
+                                <label class="checkboxCont">{{modesForward[1]}}
+                                    <input type="checkbox" ng-model="checkTF2" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(1, false, false, checkTF2)" id="forModeChkT2">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[2]}}
-                                    <input type="checkbox" id="forModeChkT3">
+                                <label class="checkboxCont">{{modesForward[2]}}
+                                    <input type="checkbox" ng-model="checkTF3" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(2, false, false, checkTF3)" id="forModeChkT3">
                                     <span class="checkmark"></span>
                                 </label>
 
-                                <label ng-click="checkBoxes(false)" class="checkboxCont">{{modesForward[3]}}
-                                    <input type="checkbox" id="forModeChkT4">
+                                <label class="checkboxCont">{{modesForward[3]}}
+                                    <input type="checkbox" ng-model="checkTF4" ng-true-value="true" ng-false-value="false" ng-change="checkBoxes(3, false, false, checkTF4)" id="forModeChkT4">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -845,6 +896,9 @@
         </div>
         <div class="col-lg-4">
             <div class="box">
+                <div class="pace pace-active" ng-show="expRunning==true">
+                  <div class="pace-activity"></div>
+                </div>
                 <div class="box-header">
                     <h3>Coefficients of Incoming Modes</h3>
                     <small>Enter complex amplitudes of the incoming modes.</small>
@@ -883,7 +937,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class='btn red' ng-click="runTransmissionExp()">Run Experiment</button>
+                            <button type="button" class='btn red' ng-click="runTransmissionExp()" ng-disabled="expRunning==true">Run Experiment</button>
                         </div>
                     </div>
                 </div>
