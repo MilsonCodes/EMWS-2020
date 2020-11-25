@@ -100,17 +100,22 @@ def organizeEigen(val, vec):
         if imaginary:
             if (DEBUG):
                 print('Eigenvalue ' + str(v) + ' is imaginary')
-            if (v.imag > 0) and (not i == 0):
+            if (v.imag < 0) and (not i == 0):
                 if (DEBUG):
-                    print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to front!')
+                    print('Eigenvalue ' + str(v) + ' is negative imaginary. Swapping to front!')
                 val = swapArrayIndices(val, i, 0)
                 vec = swapMatrixColumns(vec, i, 0)
+            elif not i == 2:
+                if (DEBUG):
+                    print('Eigenvalue ' + str(v) + ' is positive imaginary. Swapping to 3rd slot!')
+                val = swapArrayIndices(val, i, 2)
+                vec = swapMatrixColumns(vec, i, 2)
         elif real:
             if (DEBUG):
                 print('Eigenvalue ' + str(v) + ' is real')
-            if (v.real < 0) and (not i == 1):
+            if (v.real > 0) and (not i == 1):
                 if (DEBUG):
-                    print('Eigenvalue ' + str(v) + ' is negative real. Swapping to second entry!')
+                    print('Eigenvalue ' + str(v) + ' is positive real. Swapping to second entry!')
                 val = swapArrayIndices(val, i, 1)
                 vec = swapMatrixColumns(vec, i, 1)
     t4 = val[3]
@@ -250,7 +255,7 @@ class Structure:
             # print(eigVal, eigVec)
             # for i in range(4):
             #     self.layers[n].eigVec[i] = np.transpose(eigVec[i])
-            if n == 0 or n == self.num-1:
+            if n == 0 or n == self.num - 1:
                 self.layers[n].eigVal, self.layers[n].eigVec = organizeEigen(eigVal, eigVec)
             else:
                 self.layers[n].eigVal, self.layers[n].eigVec = eigVal, eigVec
