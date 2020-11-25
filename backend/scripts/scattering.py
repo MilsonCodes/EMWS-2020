@@ -8,7 +8,7 @@ from scipy.linalg import eig
 # Set precision for printing arrays
 np.set_printoptions(precision=5, suppress=True)
 
-DEBUG = False
+DEBUG = True
 
 # Values are for default struct with [0, 1, 0, 0] incoming coefficients
 vv11 = np.array([np.complex(0.0, -0.121293), np.complex(-0.61281, 0.0), np.complex(0.0, 0.121293), np.complex(0.61281, 0.0)], dtype=complex) # np.array([np.complex(-0.121293, 5.97957*(10**-18)), np.complex(0.121293, 2.89059*(10**-17)), np.complex(5.33339*(10**-16), -0.61281), np.complex(4.43682*(10**-17), 0.61281)], dtype=complex)
@@ -250,8 +250,10 @@ class Structure:
             # print(eigVal, eigVec)
             # for i in range(4):
             #     self.layers[n].eigVec[i] = np.transpose(eigVec[i])
-            self.layers[n].eigVal, self.layers[n].eigVec = organizeEigen(eigVal, eigVec)
-            # self.layers[n].eigVal, self.layers[n].eigVec = eigVal, eigVec
+            if n == 0 or n == self.num-1:
+                self.layers[n].eigVal, self.layers[n].eigVec = organizeEigen(eigVal, eigVec)
+            else:
+                self.layers[n].eigVal, self.layers[n].eigVec = eigVal, eigVec
             if (DEBUG):
                 Av = np.multiply(self.maxwell[n], np.transpose(eigVec))
                 lambdaV = np.multiply(eigVal, np.transpose(eigVec))
@@ -272,6 +274,8 @@ class Structure:
         if (DEBUG):
             print('\nImporting previously created eigendata')
         for n in range(len(self.layers)):
+            print(f'Eigenvalue array {n}:\n{e_vals[n]}')
+            print(f'Eigenvector array {n}:\n{e_vecs[n]}')
             self.layers[n].eigVal = e_vals[n]
             self.layers[n].eigVec = e_vecs[n]
 
@@ -317,8 +321,8 @@ class Structure:
 
     # Calculate the scattering matrix to be used in the constants calulation
     def calcScattering(self):
-        if (not DEBUG):
-            self.debugEigV()
+        # if (not DEBUG):
+            # self.debugEigV()
         layers = self.num
         I = layers - 1
         s = np.zeros((4*I,4*layers), dtype=complex)
