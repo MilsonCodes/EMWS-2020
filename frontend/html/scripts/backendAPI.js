@@ -8,8 +8,8 @@ var backendAPI = backendAPI || {};
 
 const hostname = window && window.location && window.location.hostname;
 
-//const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
-const API_HOST = "https://emws.pythonanywhere.com/"
+const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
+//const API_HOST = "https://emws.pythonanywhere.com/"
 
 const request = async (route, body, request_type="POST", content_type="application/json") => {
   var numReqSent = 0, maxReqAttempt = 5, res = null
@@ -144,7 +144,33 @@ const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   return newEigVals
 }
 
+const transposeArray = (array) => {
+  var newArray = [];
+  for(var i = 0; i < array.length; i++){
+      newArray.push([]);
+  };
+
+  for(var i = 0; i < array.length; i++){
+      for(var j = 0; j < array[i].length; j++){
+          newArray[j].push(array[i][j]);
+      };
+  };
+
+  return newArray;
+}
+
+const transposeArrayOfVectors = vecMats => {
+  var transposedVecMats = []
+
+  vecMats.forEach(vecMat => transposedVecMats.push(transposeArray(vecMat)))
+
+  return transposedVecMats
+}
+
 const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
+  // Transpose
+  eVecs = transposeArrayOfVectors(eVecs)
+
   var newEigVecs = new Array(eVecs.length)
 
   for(let i = 0; i < newEigVecs.length; i++) {
@@ -164,6 +190,8 @@ const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
       }
     }
   }
+
+  newEigVecs = transposeArrayOfVectors(newEigVecs)
 
   console.log(newEigVecs)
   
