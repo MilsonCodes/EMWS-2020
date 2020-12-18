@@ -1,27 +1,30 @@
 from flask import Flask, render_template
 from flask import request
 from flask import json
-import numpy
+import numpy as np
 from flask_cors import CORS, cross_origin
-import sys, os
+import sys
 sys.path.append('/home/EMWS/EMWS-2020/backend')
 from scripts.scattering import Structure as s
 
 
 # Run server by calling python app.py
 app = Flask(__name__)
-origins = ["http://localhost:8000", "https://www.math.lsu.edu/"]
-CORS(app, resources={r"/structure": {"origins": origins[0]}})
+# List of accepted origins
+origins = ["http://localhost:8000", "https://www.math.lsu.edu"]
+# Change origins to '*' if this solution gives issues
+CORS(app, resources={r"/structure": {"origins": origins}})
 
-base = '''
-Welcome to the EMWS API!
-\n\n
-Source code and documentation can be found here:
-\n\thttps://github.com/MilsonCodes/EMWS-2020
-\n\n
-The live site can be found here:
-\n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
-'''
+# Greeting message, currently unused
+base =  '''
+        Welcome to the EMWS API!
+        \n\n
+        Source code and documentation can be found here:
+        \n\thttps://github.com/MilsonCodes/EMWS-2020
+        \n\n
+        The live site can be found here:
+        \n\thttps://www.math.lsu.edu/~shipman/EMWS/html/dashboard.4.html
+    '''
 
 # Base route example
 @app.route('/')
@@ -36,6 +39,16 @@ def encode_complex(z):
     except:
         return z
 
+def decode_complex(val):
+    z = None
+    try:
+        z = complex(val['re'], val['im'])
+        return z
+    except:
+        z = val
+        return z
+
+# Functions for encoding/decoding arbitrary length vectors
 def encode_vector(v):
     vec = []
     for n in range(len(v)):
@@ -46,7 +59,7 @@ def decode_vector(v):
     vec = []
     for n in range(len(v)):
         vec.append(decode_complex(v[n]))
-    return vec
+    return np.asarray(vec, dtype=complex)
 
 # Encode 3d array
 def encode_matrix(m):
@@ -57,32 +70,19 @@ def encode_matrix(m):
                 m[i][j][k] = encode_complex(m[i][j][k])
     return m
 
-
-def decode_complex(val):
-    z = None
-    try:
-        z = complex(val['re'], val['im'])
-        return z
-    except:
-        z = val
-        return z
-
 # Function to replace all elements of a 4x4 array with tuples
 def encode_maxwell(m):
     n = [[0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]]
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]]
     for i in range(4):
         for j in range(4):
             n[i][j] = encode_complex(m.item(i,j))
     return n
 
 def decode_maxwell(m):
-    n = [[0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0],
-         [0, 0, 0, 0]]
+    n = np.zeros((4,4), dtype=complex)
     for i in range(4):
         for j in range(4):
             n[i][j] = decode_complex(m[i][j])
@@ -97,7 +97,7 @@ def encode_eigen(m):
     return n
 
 def decode_eigen(m):
-    n = [0, 0, 0, 0]
+    n = np.zeros(4, dtype=complex)
     for i in range(4):
         n[i] = decode_complex(m[i])
     return n
@@ -110,9 +110,10 @@ def encode_evecs(m):
     return n
 
 def decode_evecs(m):
-    n = [0, 0, 0, 0]
-    for i in range(len(m)):
-        n[i] = decode_eigen(m[i])
+    n = np.zeros((4,4), dtype=complex)
+    for i in range(4):
+        for j in range(4):
+            n[i][j] = decode_complex(m[i][j])
     return n
 
 # Function set to encode/decode a scattering matrix
@@ -144,7 +145,7 @@ def encode_constants(m):
     return n
 
 def decode_constants(m):
-    n = [0] * len(m)
+    n = np.zeros(len(m), dtype=complex)
 
     for i in range(len(m)):
         n[i] = decode_complex(m[i])
@@ -156,6 +157,7 @@ def decode_constants(m):
 @cross_origin()
 def modes():
     assert request.method == 'POST'
+    # print('Mode route beginning')
     # Parse data
     req = json.loads(request.data)
     omega = req['omega']
@@ -163,19 +165,23 @@ def modes():
     k2 = req['k2']
     layers = req['layers']
     num = len(layers)
+
+    # Create structure
     struct = s(num, omega, k1, k2)
     for layer in layers:
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
+    # Calculate and build structure
     struct.buildMatrices()
     struct.calcEig()
     struct.calcModes()
+
+    # Create list of values for response
     maxwells = []
     e_vals = []
     e_vecs = []
     modes = []
     i = 0
     for layer in struct.layers:
-        print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal.tolist())
         o = encode_evecs(layer.eigVec.tolist())
@@ -188,12 +194,15 @@ def modes():
         modes.append(mm)
         i += 1
 
+    # Prepare response data
     data = {
         'maxwell_matrices': maxwells,
         'eigenvalues': e_vals,
         'eigenvectors': e_vecs,
         'modes': modes
     }
+
+    # print('Mode route completed')
 
     return json.jsonify(data)
 
@@ -202,6 +211,7 @@ def modes():
 @cross_origin()
 def field():
     assert request.method == 'POST'
+    # print('Field route beginning')
     req = json.loads(request.data)
     omega = req['omega']
     k1 = req['k1']
@@ -222,10 +232,16 @@ def field():
 
     try:
         maxwell_matrices = req['maxwell_matrices']
+    except Exception:
+        pass
+        #print('\nFailed to load maxwell. Will calculate data')
+    try:
         eigenvalues = req['eigenvalues']
         eigenvectors = req['eigenvectors']
     except Exception:
-        print('\nFailed to maxwell or eigendata. Will calculate data')
+        pass
+        #print('\nFailed to load eigen system. Will calculate data')
+
 
     # Handle maxwells
     if maxwell_matrices == None:
@@ -286,8 +302,39 @@ def field():
     except Exception:
         num_points = 200
 
-    field = struct.determineField(num_points)
+    # This needs to be optimized, either calcuate all from the beginning or
+    #   fix the import/decode eigen functions.
+    try:
+        field = struct.determineField(num_points)
+    except Exception:
+        struct.buildMatrices()
+        maxwells = []
+        for maxwell in struct.maxwell:
+            m = encode_maxwell(maxwell)
+            maxwells.append(m)
+        data['maxwell_matrices'] = maxwells
+        struct.calcEig()
+        struct.calcModes()
+        e_vals = []
+        e_vecs = []
+        i = 0
+        for layer in struct.layers:
+            n = encode_eigen(layer.eigVal.tolist())
+            o = encode_evecs(layer.eigVec.tolist())
+
+            e_vals.append(n)
+            e_vecs.append(o)
+            i += 1
+        data['eigenvalues'] = e_vals
+        data['eigenvectors'] = e_vecs
+        struct.calcScattering()
+        struct.calcConstants(incoming[0], incoming[1], incoming[2], incoming[3])
+        data['scattering'] = encode_scattering(struct.scattering)
+        data['constants'] = encode_constants(struct.constants)
+        field = struct.determineField(num_points)
     data['field'] = field
+
+    # print('Field route completed')
 
     return json.jsonify(data)
 
@@ -297,6 +344,7 @@ def field():
 @cross_origin()
 def constants():
     assert request.method == 'POST'
+    # print('Constants route beginning')
     # Parse data
     req = json.loads(request.data)
     omega = req['omega']
@@ -319,7 +367,7 @@ def constants():
         maxwell = True
     except:
         maxwells = []
-        print('No maxwell matrix included')
+        #print('No maxwell matrix included')
     for layer in layers:
         struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
         try:
@@ -327,7 +375,8 @@ def constants():
             e_vecs.append(decode_evecs(layer['eig_vectors']))
             eigen = True
         except:
-            print('No eigen data included')
+            pass
+            #print('No eigen data included')
     if (maxwell == False):
         struct.buildMatrices()
     else:
@@ -341,11 +390,11 @@ def constants():
     e_vecs = []
     i = 0
     for layer in struct.layers:
-        print(layer.eigVec)
         m = encode_maxwell(struct.maxwell[i])
         n = encode_eigen(layer.eigVal)
-        o = encode_evecs(layer.eigVec.tolist())
-
+        o = []
+        for j in range(4):
+            o.append(encode_eigen(layer.eigVec[j].tolist()[0]))
         maxwells.append(m)
         e_vals.append(n)
         e_vecs.append(o)
@@ -369,6 +418,8 @@ def constants():
     }
 
     response = json.jsonify(data)
+
+    # print('Constants route completed')
 
     return response
 

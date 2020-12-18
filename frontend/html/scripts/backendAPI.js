@@ -8,8 +8,8 @@ var backendAPI = backendAPI || {};
 
 const hostname = window && window.location && window.location.hostname;
 
-//const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
-const API_HOST = "https://emws.pythonanywhere.com/"
+const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
+//const API_HOST = "https://emws.pythonanywhere.com/"
 
 const request = async (route, body, request_type="POST", content_type="application/json") => {
   var numReqSent = 0, maxReqAttempt = 5, res = null
@@ -118,6 +118,18 @@ const parseStringVal = str => {
   return val
 }
 
+const parseNumberVal = (str, def) => {
+  var val = str
+
+  try {
+    val = Number(str)
+  } catch(e) {
+    console.log("Could not parse string inputted -- reverting to default value")
+  }
+
+  return val
+}
+
 const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   var newEigVals = new Array(eVals.length)
 
@@ -144,7 +156,33 @@ const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   return newEigVals
 }
 
+const transposeArray = (array) => {
+  var newArray = [];
+  for(var i = 0; i < array.length; i++){
+      newArray.push([]);
+  };
+
+  for(var i = 0; i < array.length; i++){
+      for(var j = 0; j < array[i].length; j++){
+          newArray[j].push(array[i][j]);
+      };
+  };
+
+  return newArray;
+}
+
+const transposeArrayOfVectors = vecMats => {
+  var transposedVecMats = []
+
+  vecMats.forEach(vecMat => transposedVecMats.push(transposeArray(vecMat)))
+
+  return transposedVecMats
+}
+
 const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
+  // Transpose
+  eVecs = transposeArrayOfVectors(eVecs)
+
   var newEigVecs = new Array(eVecs.length)
 
   for(let i = 0; i < newEigVecs.length; i++) {
@@ -164,6 +202,8 @@ const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
       }
     }
   }
+
+  newEigVecs = transposeArrayOfVectors(newEigVecs)
 
   console.log(newEigVecs)
   
@@ -188,9 +228,9 @@ class Structure {
   }
 
   updateValues(omega, k1, k2, layers) {
-    this.omega = omega
-    this.k1 = k1
-    this.k2 = k2
+    this.omega = parseNumberVal(omega, 0.398)
+    this.k1 = parseNumberVal(k1, 0.5)
+    this.k2 = parseNumberVal(k2, 0.22)
     this.layers = layers
   }
 
