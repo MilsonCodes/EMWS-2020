@@ -141,6 +141,7 @@ const parseNumberVal = (str, def) => {
   return val
 }
 
+/** Orders the eigenvalues based on information */
 const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   var newEigVals = new Array(eVals.length)
 
@@ -167,6 +168,7 @@ const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   return newEigVals
 }
 
+/** Transposes a matrix */
 const transposeArray = (array) => {
   var newArray = [];
   for(var i = 0; i < array.length; i++){
@@ -182,6 +184,7 @@ const transposeArray = (array) => {
   return newArray;
 }
 
+/** Transposes a group of matrices */
 const transposeArrayOfVectors = vecMats => {
   var transposedVecMats = []
 
@@ -190,6 +193,7 @@ const transposeArrayOfVectors = vecMats => {
   return transposedVecMats
 }
 
+/** Orders the eigenvectors based on a specific ordering */
 const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
   // Transpose
   eVecs = transposeArrayOfVectors(eVecs)
@@ -221,8 +225,7 @@ const orderEigenvectors = (eVecs, orderLeft, orderRight) => {
   return newEigVecs
 }
 
-//const convert
-
+/** Creates a structure object. */
 backendAPI.createStructureObject = (omega, k1, k2, layers) => {
   return new Structure(omega, k1, k2, layers)
 }
@@ -238,6 +241,7 @@ class Structure {
     this.eigenOrderRight = [0,1,2,3] 
   }
 
+  /** Updates the values of the structure */
   updateValues(omega, k1, k2, layers) {
     this.omega = parseNumberVal(omega, 0.398)
     this.k1 = parseNumberVal(k1, 0.5)
@@ -261,6 +265,7 @@ class Structure {
     return this.layers
   }
 
+  /** Calls upon the API and builds the structure */
   async buildStructure() {
     var data = { 
       omega: this.omega,
@@ -296,6 +301,7 @@ class Structure {
     return this.eigenvectors ? this.eigenvectors : null
   }
 
+  /** Calls upon the API and gets the constant vector */
   async getConstantVector() {
     var data = {
       omega: this.omega,
@@ -332,6 +338,7 @@ class Structure {
     this.constants = res.constants
   }
 
+  /** Sets the incoming coefficients */
   setIncoming(incoming) {
     if(incoming) {
       var parsedIncoming = new Array(incoming.length)
@@ -348,6 +355,11 @@ class Structure {
     return this.incoming
   }
 
+  /** 
+   * Performs a permutation on the order list
+   * 
+   * toRight determines which list is to be used
+   */
   permuteOrder(oldIndex, newIndex, toRight) {
     // bruh: https://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
     const array_move = (arr, old_index, new_index) => {
@@ -368,6 +380,7 @@ class Structure {
       this.eigenOrderLeft = array_move(this.eigenOrderLeft, oldIndex, newIndex)
   }
 
+  /** Switches an index position in the order array */
   switchInOrder(oldIndex, newIndex, toRight) {
     const array_switch = (arr, old_index, new_index) => {
       var temp = arr[new_index]
@@ -383,6 +396,7 @@ class Structure {
       this.eigenOrderLeft = array_switch(this.eigenOrderLeft, oldIndex, newIndex)
   }
 
+  /** Resets the order list */
   resetPermuteOrder(toRight) {
     if(toRight)
       this.eigenOrderRight = [0,1,2,3]
@@ -405,6 +419,7 @@ class Structure {
     }
   }
 
+  /** Reorders a part of the order list */
   reorderPartOfOrder(startingPos, toRight) {
     var arr = toRight ? this.eigenOrderRight : this.eigenOrderLeft
 
@@ -418,6 +433,7 @@ class Structure {
       this.eigenOrderLeft = newArr
   }
 
+  /** Places a position back in its ordered position */
   placePositionBackInOrder(id, startingPos, toRight) {
     var arr = toRight ? this.eigenOrderRight : this.eigenOrderLeft
 
@@ -444,6 +460,7 @@ class Structure {
     return this.constants ? this.constants : null
   }
 
+  /** Determines the field by calling upon the API */
   async determineField() {
     var data = {
       omega: this.omega,
