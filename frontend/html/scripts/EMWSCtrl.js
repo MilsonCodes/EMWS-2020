@@ -1,3 +1,11 @@
+/**
+ * EMWSCtrl.js
+ * ---------------------
+ * Controls the site using the module below
+ * 
+ * This is where pieces of the site is controlled.
+ */
+
 // code style: https://github.com/johnpapa/angular-styleguide 
 angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
 
@@ -117,6 +125,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     return false;
   }
 
+  /** Hides some tabs if not in dev mode. */
   function hideIfInDevMode() {
     const hostname = window && window.location && window.location.hostname; 
     
@@ -127,12 +136,12 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     $scope.runMathBoxField = devMode;
 
     if (!devMode) {
-      document.getElementById("mathbox-field-box").classList.add("ng-hide");
-      document.getElementById("nav-tab3").classList.add("ng-hide");
-      document.getElementById("nav-tab4").classList.add("ng-hide");
+      document.getElementById("mathbox-field-box").classList.add("ng-hide");        // Mathbox
+      document.getElementById("nav-tab3").classList.add("ng-hide");                 // Transmission tab
+      document.getElementById("nav-tab4").classList.add("ng-hide");                 // Dispersion tab
 
-      document.getElementsByClassName("dropdown-menu")[0].getElementsByClassName("col-xs-6")[2].classList.add("ng-hide");
-      document.getElementsByClassName("dropdown-menu")[0].getElementsByClassName("col-xs-6")[3].classList.add("ng-hide");
+      document.getElementsByClassName("dropdown-menu")[0].getElementsByClassName("col-xs-6")[2].classList.add("ng-hide");   // Transmission dropdown box
+      document.getElementsByClassName("dropdown-menu")[0].getElementsByClassName("col-xs-6")[3].classList.add("ng-hide");   // Dispersion dropdown box
     }
   }
 
@@ -341,6 +350,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     }
   }
 
+  /** Updates the modes of the check boxes based on the tab. */
   function updateCheckBoxes(isFieldTab) {
     var incStr = "incoming" + (isFieldTab ? "" : "T");            //Create variable for base of element id names
 
@@ -350,6 +360,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     document.getElementById(incStr + "3").innerHTML = $scope.modesForward[$scope.structure.getPermuteOrder(true)[3]].toString()
   }
 
+  /** Checks the mode boxes based on the field tab. */
   $scope.checkBoxes = (id, isBackMode, isFieldTab, isChecked) => {
     var backChkStr = "backModeChk" + (isFieldTab ? "" : "T");     //Create variable for base of element id names
     var forChkStr = "forModeChk" + (isFieldTab ? "" : "T");       //Create variable for base of element id names
@@ -430,6 +441,7 @@ angular.module('myApp', []).controller('EMWSCtrl', function ($scope) {
     console.log({ backChecked: $scope.backModesChecked, forChecked: $scope.forModesChecked, forOrder: $scope.structure.getPermuteOrder(true), backOrder: $scope.structure.getPermuteOrder(false) })
   }
 
+  /** Adjusts the incoming coefficients in the structure. */
   $scope.adjustIncoming = () => {
     $scope.structure.setIncoming($scope.incoming)
   }

@@ -3,14 +3,18 @@
  * -------------------------
  * The file for accessing the Python backend server to run calculations
  * 
+ * This file has all of the operations for performing calculations
 */
 var backendAPI = backendAPI || {};
 
 const hostname = window && window.location && window.location.hostname;
 
+// Checks the site host to determine which backend to use.
 const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
+// Comment out above and uncomment below if you want to strictly use the production server
 //const API_HOST = "https://emws.pythonanywhere.com/"
 
+/** Performs a request to a specific route on the given API host */
 const request = async (route, body, request_type="POST", content_type="application/json") => {
   var numReqSent = 0, maxReqAttempt = 5, res = null
 
@@ -36,6 +40,7 @@ const request = async (route, body, request_type="POST", content_type="applicati
   return res.json();
 }
 
+/** Converts JavaScript Math.JS complex to a JSON object */
 const simplifyJSComplex = val => {
   if(val.re != 0 || val.im != 0) {
     if(val.re != 0 && val.im == 0)
@@ -47,6 +52,7 @@ const simplifyJSComplex = val => {
   }
 }
 
+/** Converts an array of eigenvalue lists to JSON lists */
 const convertEigenvaluesToPythonParsable = eigVals => {
   var newArr = new Array(eigVals.length)
 
@@ -63,6 +69,7 @@ const convertEigenvaluesToPythonParsable = eigVals => {
   return newArr
 }
 
+/** Converts a matrix to JSON lists */
 const convertComplexMatrixToPythonParsableMatrix = matrix => {
   var newMat = new Array(matrix.length)
 
@@ -77,6 +84,7 @@ const convertComplexMatrixToPythonParsableMatrix = matrix => {
   return newMat
 }
 
+/** Converts an array of matrices to JSON lists */
 const convertMatrixArrayToPythonParsable = matrixArr => {
   var newArr = new Array(matrixArr.length)
 
@@ -87,6 +95,7 @@ const convertMatrixArrayToPythonParsable = matrixArr => {
   return newArr
 }
 
+/** Converts the layer objects to Python-parsable JSON objects */
 const convertJSLayersToPythonLayers = layers => {
   var newLayers = []
 
@@ -106,6 +115,7 @@ const convertJSLayersToPythonLayers = layers => {
   return newLayers
 }
 
+/** Parses a complex string value */
 const parseStringVal = str => {
   var val = 1
 
@@ -118,8 +128,9 @@ const parseStringVal = str => {
   return val
 }
 
+/** Parses a normal number string value, and returns default when string is not valid */
 const parseNumberVal = (str, def) => {
-  var val = str
+  var val = def
 
   try {
     val = Number(str)
