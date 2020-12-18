@@ -118,6 +118,18 @@ const parseStringVal = str => {
   return val
 }
 
+const parseNumberVal = (str, def) => {
+  var val = str
+
+  try {
+    val = Number(str)
+  } catch(e) {
+    console.log("Could not parse string inputted -- reverting to default value")
+  }
+
+  return val
+}
+
 const orderEigenvalues = (eVals, orderLeft, orderRight) => {
   var newEigVals = new Array(eVals.length)
 
@@ -216,9 +228,9 @@ class Structure {
   }
 
   updateValues(omega, k1, k2, layers) {
-    this.omega = omega
-    this.k1 = k1
-    this.k2 = k2
+    this.omega = parseNumberVal(omega, 0.398)
+    this.k1 = parseNumberVal(k1, 0.5)
+    this.k2 = parseNumberVal(k2, 0.22)
     this.layers = layers
   }
 
