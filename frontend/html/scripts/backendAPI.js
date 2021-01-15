@@ -10,9 +10,9 @@ var backendAPI = backendAPI || {};
 const hostname = window && window.location && window.location.hostname;
 
 // Checks the site host to determine which backend to use.
-const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
+// const API_HOST = hostname === "math.lsu.edu" ? "https://emws.pythonanywhere.com/" : "http://localhost:5000/";      //TBD
 // Comment out above and uncomment below if you want to strictly use the production server
-//const API_HOST = "https://emws.pythonanywhere.com/"
+const API_HOST = "https://emws.pythonanywhere.com/"
 
 /** Performs a request to a specific route on the given API host */
 const request = async (route, body, request_type="POST", content_type="application/json") => {
