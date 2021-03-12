@@ -9,7 +9,7 @@ from scipy.linalg import eig
 np.set_printoptions(precision=5, suppress=True)
 
 # Set flag to TRUE when needing to debug some stuffs
-DEBUG = False
+DEBUG = True 
 
 # Values are for default struct with [0, 1, 0, 0] incoming coefficients
 vv11 = np.array([np.complex(0.0, -0.121293), np.complex(-0.61281, 0.0), np.complex(0.0, 0.121293), np.complex(0.61281, 0.0)], dtype=complex) # np.array([np.complex(-0.121293, 5.97957*(10**-18)), np.complex(0.121293, 2.89059*(10**-17)), np.complex(5.33339*(10**-16), -0.61281), np.complex(4.43682*(10**-17), 0.61281)], dtype=complex)
