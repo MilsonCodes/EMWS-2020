@@ -12,22 +12,22 @@ np.set_printoptions(precision=5, suppress=True)
 DEBUG = True 
 
 # Values are for default struct with [0, 1, 0, 0] incoming coefficients
-vv11 = np.array([np.complex(0.0, -0.121293), np.complex(-0.61281, 0.0), np.complex(0.0, 0.121293), np.complex(0.61281, 0.0)], dtype=complex) # np.array([np.complex(-0.121293, 5.97957*(10**-18)), np.complex(0.121293, 2.89059*(10**-17)), np.complex(5.33339*(10**-16), -0.61281), np.complex(4.43682*(10**-17), 0.61281)], dtype=complex)
-vv12 = np.array([np.complex(0.0, 0.600474), np.complex(0.0442088, 0.0), np.complex(0.0, -0.600474), np.complex(-0.0442088, 0.0)], dtype=complex) # np.array([np.complex(0.600474, 1.65551*(10**-17)), np.complex(-0.600474, 4.76095*(10**-16)), np.complex(-1.83054*(10**-16), 0.0442088), np.complex(-1.92455*(10**-16), -0.0442088)], dtype=complex)
-vv13 = np.array([np.complex(0.0, -0.788343), np.complex(0.0, -0.156218), np.complex(0.0, -0.788343), np.complex(0.0, -0.156218)], dtype=complex) # np.array([np.complex(0.788343, 0), np.complex(0.788343, 0), np.complex(-0.156218, -1.0639*(10**-16)), np.complex(-0.156218, -3.73559*(10**-17))], dtype=complex)
-vv14 = np.array([np.complex(0.0, 0.0568719), np.complex(0.0, 0.773373), np.complex(0.0, 0.0568719), np.complex(0.0, 0.773373)], dtype=complex) # np.array([np.complex(-0.0568719, -1.6194*(10**-16)), np.complex(-0.0568719, 2.85786*(10**-16)), np.complex(0.773373, 0), np.complex(0.773373, 0)], dtype=complex)
+vv11 = np.array([complex(0.0, -0.121293), complex(-0.61281, 0.0), complex(0.0, 0.121293), complex(0.61281, 0.0)], dtype=complex) # np.array([complex(-0.121293, 5.97957*(10**-18)), complex(0.121293, 2.89059*(10**-17)), complex(5.33339*(10**-16), -0.61281), complex(4.43682*(10**-17), 0.61281)], dtype=complex)
+vv12 = np.array([complex(0.0, 0.600474), complex(0.0442088, 0.0), complex(0.0, -0.600474), complex(-0.0442088, 0.0)], dtype=complex) # np.array([complex(0.600474, 1.65551*(10**-17)), complex(-0.600474, 4.76095*(10**-16)), complex(-1.83054*(10**-16), 0.0442088), complex(-1.92455*(10**-16), -0.0442088)], dtype=complex)
+vv13 = np.array([complex(0.0, -0.788343), complex(0.0, -0.156218), complex(0.0, -0.788343), complex(0.0, -0.156218)], dtype=complex) # np.array([complex(0.788343, 0), complex(0.788343, 0), complex(-0.156218, -1.0639*(10**-16)), complex(-0.156218, -3.73559*(10**-17))], dtype=complex)
+vv14 = np.array([complex(0.0, 0.0568719), complex(0.0, 0.773373), complex(0.0, 0.0568719), complex(0.0, 0.773373)], dtype=complex) # np.array([complex(-0.0568719, -1.6194*(10**-16)), complex(-0.0568719, 2.85786*(10**-16)), complex(0.773373, 0), complex(0.773373, 0)], dtype=complex)
 
-vv21 = np.array([np.complex(0.0, 0.482924), np.complex(0.0831366, 0.0), np.complex(0.0, -0.482924), np.complex(-0.0831366, 0.0)], dtype=complex) # np.array([np.complex(-0.482924, -3.30323*(10**-18)), np.complex(0.482924, 1.67514*(10**-17)), np.complex(-0.0831366, -2.8195*(10**-17)), np.complex(-0.0831366, 7.03906*(10**-17))], dtype=complex)
-vv22 = np.array([np.complex(0.0, -0.128803), np.complex(-0.872776, 0.0), np.complex(0.0, 0.128803), np.complex(0.872776, 0.0)], dtype=complex) # np.array([np.complex(0.128803, 6.98095*(10**-17)), np.complex(-0.128803, 9.25412*(10**-17)), np.complex(0.872776, 0), np.complex(0.872776, 0)], dtype=complex)
-vv23 = np.array([np.complex(0.0, -0.0821325), np.complex(0.0, 0.464742), np.complex(0.0, -0.0821325), np.complex(0.0, 0.464742)], dtype=complex) # np.array([np.complex(-0.0821325, 9.36681*(10**-18)), np.complex(-0.0821325, -1.29001*(10**-17)), np.complex(-1.29383*(10**-16), 0.464742), np.complex(-8.46814*(10**-18), -0.464742)], dtype=complex)
-vv24 = np.array([np.complex(0.0, 0.862234), np.complex(0.0, -0.123954), np.complex(0.0, 0.862234), np.complex(0.0, -0.123954)], dtype=complex) # np.array([np.complex(0.862234, 0), np.complex(0.862234, 0), np.complex(-3.97554*(10**-18), -0.123954), np.complex(-9.25688*(10**-17), 0.123954)], dtype=complex)
+vv21 = np.array([complex(0.0, 0.482924), complex(0.0831366, 0.0), complex(0.0, -0.482924), complex(-0.0831366, 0.0)], dtype=complex) # np.array([complex(-0.482924, -3.30323*(10**-18)), complex(0.482924, 1.67514*(10**-17)), complex(-0.0831366, -2.8195*(10**-17)), complex(-0.0831366, 7.03906*(10**-17))], dtype=complex)
+vv22 = np.array([complex(0.0, -0.128803), complex(-0.872776, 0.0), complex(0.0, 0.128803), complex(0.872776, 0.0)], dtype=complex) # np.array([complex(0.128803, 6.98095*(10**-17)), complex(-0.128803, 9.25412*(10**-17)), complex(0.872776, 0), complex(0.872776, 0)], dtype=complex)
+vv23 = np.array([complex(0.0, -0.0821325), complex(0.0, 0.464742), complex(0.0, -0.0821325), complex(0.0, 0.464742)], dtype=complex) # np.array([complex(-0.0821325, 9.36681*(10**-18)), complex(-0.0821325, -1.29001*(10**-17)), complex(-1.29383*(10**-16), 0.464742), complex(-8.46814*(10**-18), -0.464742)], dtype=complex)
+vv24 = np.array([complex(0.0, 0.862234), complex(0.0, -0.123954), complex(0.0, 0.862234), complex(0.0, -0.123954)], dtype=complex) # np.array([complex(0.862234, 0), complex(0.862234, 0), complex(-3.97554*(10**-18), -0.123954), complex(-9.25688*(10**-17), 0.123954)], dtype=complex)
 
 mathematica_vectors = np.array([[vv11, vv12, vv13, vv14],
                                 [vv21, vv22, vv23, vv24],
                                 [vv11, vv12, vv13, vv14]], dtype=complex)
 
-ee1 = np.array([np.complex(0.0, 1.90425), np.complex(-0.360895, 0.0), np.complex(0.0, -1.90425), np.complex(0.360895, 0.0)], dtype=complex) # np.array([np.complex(2.09202*(10**-16), -1.90425), np.complex(4.44089*(10**-16), 1.90425), np.complex(0.360895, -9.86973*(10**-18)), np.complex(-0.360895, -8.73395*(10**-17))], dtype=complex)
-ee2 = np.array([np.complex(0.0, 1.67391), np.complex(-0.107923, 0.0), np.complex(0.0, -1.67391), np.complex(0.107923, 0.0)], dtype=complex) # np.array([np.complex(-3.33067*(10**-16), -1.67391), np.complex(-2.22045*(10**-16), 1.67391), np.complex(0.107923, -1.6017*(10**-17)), np.complex(-0.107923, -8.92287*(10**-18))], dtype=complex)
+ee1 = np.array([complex(0.0, 1.90425), complex(-0.360895, 0.0), complex(0.0, -1.90425), complex(0.360895, 0.0)], dtype=complex) # np.array([complex(2.09202*(10**-16), -1.90425), complex(4.44089*(10**-16), 1.90425), complex(0.360895, -9.86973*(10**-18)), complex(-0.360895, -8.73395*(10**-17))], dtype=complex)
+ee2 = np.array([complex(0.0, 1.67391), complex(-0.107923, 0.0), complex(0.0, -1.67391), complex(0.107923, 0.0)], dtype=complex) # np.array([complex(-3.33067*(10**-16), -1.67391), complex(-2.22045*(10**-16), 1.67391), complex(0.107923, -1.6017*(10**-17)), complex(-0.107923, -8.92287*(10**-18))], dtype=complex)
 
 mEE = [ee1, ee2, ee1]
 
@@ -153,6 +153,7 @@ def organizeEigenForMiddleLayers(val, vec):
 
     return val, vec
 
+
 # Classes for storing structure data
 class Structure:
 
@@ -168,6 +169,7 @@ class Structure:
             self.mu = mu
             self.solution = np.zeros(4, dtype=complex)
             self.eigVec = [np.zeros((4,1), dtype=complex)] * 4
+            self.eigVal = [np.zeroes(4)]
 
         def __str__(self):
             try:
@@ -551,7 +553,7 @@ class Structure:
                 interfaces[z] = z_ends[z] - z_ends[z-1]
 
         piScalar = np.pi * 0.4
-        scalar = np.exp(np.multiply(np.complex(0.0, 1.0), piScalar))
+        scalar = np.exp(np.multiply(complex(0.0, 1.0), piScalar))
         scalarMat = np.multiply(scalar, self.layers[layer].eigVec)
         expDiag = np.diag(np.exp(np.multiply(self.layers[layer].eigVal, (z - interfaces[layer]))))
         expMat = np.matmul(scalarMat, expDiag)
@@ -601,7 +603,7 @@ class Structure:
 
                 piScalar = np.pi * 0.4
 
-                scalar = np.exp(np.multiply(np.complex(0.0, 1.0), piScalar))
+                scalar = np.exp(np.multiply(complex(0.0, 1.0), piScalar))
                 scalarMat = np.multiply(scalar, self.layers[layer].eigVec)
                 expDiag = np.diag(np.exp(np.multiply(self.layers[layer].eigVal, (z - references[layer]))))
                 expMat = np.matmul(scalarMat, expDiag)
