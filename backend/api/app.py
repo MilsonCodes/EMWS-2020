@@ -4,8 +4,8 @@ from flask import json
 import numpy as np
 from flask_cors import CORS, cross_origin
 import sys
-sys.path.append('/home/EMWS/EMWS-2020/backend')
-from scripts.scattering import Structure as s
+sys.path.append('/Users/joelkeller/EMWS-2020/backend')
+from scattering import Structure as s
 
 
 # Run server by calling python app.py
@@ -169,7 +169,7 @@ def modes():
     # Create structure
     struct = s(num, omega, k1, k2)
     for layer in layers:
-        struct.addLayer(layer['name'], layer['length'], layer['epsilon'], layer['mu'])
+        struct.addLayer(layer['n ame'], layer['length'], layer['epsilon'], layer['mu'])
     # Calculate and build structure
     struct.buildMatrices()
     struct.calcEig()
